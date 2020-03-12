@@ -1,0 +1,24 @@
+# Ansible
+*.retry
+
+# Vagrant
+.vagrant/
+
+# Venv
+.env/
+env/
+.venv/
+venv/
+
+# vim
+*.swp
+
+# Credentials
+credentials/
+*.passwd
+
+files/hosts.ini
+ubuntu-dev-ssh-key
+ubuntu-dev-ssh-key.pub
+cluster-ssh-key
+cluster-ssh-key.pub

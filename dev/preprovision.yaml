@@ -1,0 +1,68 @@
+---
+- hosts: all
+  connection: local
+  gather_facts: false
+  tasks:
+  - name: Generate ssh key
+    openssh_keypair:
+      path: './ubuntu-dev-ssh-key'
+      size: 4096
+  - copy:
+      src: './ubuntu-dev-ssh-key'
+      dest: '../files/cluster-ssh-key'
+      mode: '0600'
+
+- hosts: all
+  become: true
+  gather_facts: false
+  pre_tasks:
+  - name: Make sure python package is installed (16.04 does not by default)
+    raw: bash -c "test -e /usr/bin/python || (apt -qqy update && apt install -qqy python3 python)"
+    register: output
+    changed_when: output.stdout != ""
+
+- hosts: all
+  become: true
+  tasks:
+  - name: Disallow ssh password authentication to replicate default Ubuntu images
+    lineinfile:
+      path: /etc/ssh/sshd_config
+      regexp: '^#?PasswordAuthentication'
+      line: 'PasswordAuthentication no'
+      backrefs: yes
+    notify: reload ssh
+
+  # Add ubuntu user for Ansible
+  - name: Create ubuntu user
+    user:
+      name: ubuntu
+      # password: ubuntu
+      password: '$6$BYUxdH3Ut$MAXdZ/MpSjk8Bh20YLqMfjuC7J/23NuD67jqLbngNssx8hF.XFS0QimrLdTrSx6a4Wh4KVBm7XCTn/0olPExf0'
+      shell: /bin/bash
+      groups: sudo
+      append: yes
+      state: present
+
+  - name: Copy ubuntu dev ssh pubkey
+    copy:
+      src: './ubuntu-dev-ssh-key.pub'
+      dest: /home/ubuntu/ubuntu-dev-ssh-key.pub
+      owner: ubuntu
+      group: ubuntu
+      mode: 0600
+
+  - name: Register Vagrant entry pubkey
+    slurp:
+      src: /home/ubuntu/ubuntu-dev-ssh-key.pub
+    register: ubuntu_pubkey
+
+  - name: Add ubuntu pubkey to ubuntu authorized_keys
+    authorized_key:
+      user: ubuntu
+      key: "{{ ubuntu_pubkey.content | b64decode }}"
+
+  handlers:
+  - name: reload ssh
+    service:
+      name: ssh
+      state: reloaded
