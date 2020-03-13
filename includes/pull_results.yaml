@@ -1,0 +1,6 @@
+---
+- name: Push ~/results to IAAS nodes
+  synchronize:
+    mode: pull
+    src: /home/ubuntu/results/
+    dest: "{{ results_path }}"

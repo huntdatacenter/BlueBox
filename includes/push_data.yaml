@@ -1,0 +1,3 @@
+---
+- name: Push ~/data to IAAS nodes
+  command: "parallel-rsync -raz --hosts=hosts.txt {{ data_path }} /home/ubuntu/data/"

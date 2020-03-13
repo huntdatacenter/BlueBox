@@ -16,9 +16,6 @@
         groups: ["all", "nodes"]
       with_lines: cat ./hosts.txt
       tags: push, pull
-    - name: Push data
-      include: includes/push.yaml
-      tags: never, push
 
 # Prepare IAAS nodes
 - hosts: all
@@ -45,5 +42,13 @@
       tags: never, pull
     - name: Synchronize scripts
       synchronize:
-        src: './scripts'
-        dest: /home/ubuntu/
+        src: './code/'
+        dest: /home/ubuntu/code/
+
+- hosts: localhost
+  connection: local
+  gather_facts: false
+  tasks:
+    - name: Push data
+      include: includes/push.yaml
+      tags: never, push

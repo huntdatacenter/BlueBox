@@ -69,6 +69,17 @@ Playbook includes:
 ansible-playbook playbook.yaml
 ```
 
+## Push data / pull results
+
+Examples (use your paths):
+
+```
+ansible-playbook ansible.yaml -t push --extra-vars "data_path=./data"
+
+ansible-playbook ansible.yaml -t pull --extra-vars "results_path=./results"
+```
+
+
 ## Parallel workload
 
 To run a workload make sure that your own scripts and data are in place on remote nodes.
@@ -77,7 +88,7 @@ We are providing example `tasks.txt`, with one command per line.
 Starting a workload on nodes:
 
 ```
-cat tasks.txt | parallel --ungroup --sshloginfile hosts.txt -j1 --no-run-if-empty
+cat tasks.txt | parallel --ungroup --sshloginfile hosts.txt -j1 --no-run-if-empty --workdir /home/ubuntu/code
 ```
 
 - j: number of jobs per node

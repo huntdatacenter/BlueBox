@@ -26,3 +26,9 @@ cluster-ssh-key.pub
 hosts.txt
 code/*
 !code/.keep
+!code/example.sh
+results/*
+!results/.keep
+data/*
+!data/.keep
+!data/example
