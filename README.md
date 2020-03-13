@@ -8,7 +8,7 @@ Setup local environment on your home server:
 
 ```
 sudo apt install pssh
-git clone git@github.com:huntdatacenter/IAAS-scibox-example.git
+git clone https://github.com/huntdatacenter/IAAS-scibox-example.git
 cd IAAS-scibox-example
 conda create -y --name env
 conda install -f -y -q --name env -c conda-forge --file files/requirements.txt
