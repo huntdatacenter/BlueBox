@@ -79,10 +79,14 @@ We are providing example `tasks.txt`, with one command per line.
 Starting a workload on nodes:
 
 ```
-cat tasks.txt | parallel --sshloginfile hosts.txt -j1 --no-run-if-empty
+cat tasks.txt | parallel --ungroup --sshloginfile hosts.txt -j1 --no-run-if-empty
 ```
 
-(-j == 1 job per node)
+- j: number of jobs per node
+- ungroup: immediate output in terminal, do not use if need output of jobs organised in groups
+
+In our example we just let the node sleep for some time and report which nodes are assigned jobs,
+when they start and when they are done.
 
 ## Simulate on local computer (notebook)
 
