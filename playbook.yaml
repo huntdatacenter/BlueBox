@@ -82,8 +82,8 @@
         file_type: any
       register: listing
       tags: never, listresults, pull
-    - name: List of files
+    - name: List
       debug:
-        msg: "{{ listing | json_query('files[*].path') }}"
+        var: listing | json_query('files[*].path')
       tags: never, listdata, listresults, push, pull
       when: listing is succeeded
