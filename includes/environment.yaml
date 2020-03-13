@@ -1,0 +1,68 @@
+---
+# ENVIRONMENT - DEPENDENCIES and PACKAGES
+- name: Install common-packages
+  apt:
+    name:
+      - htop
+      - parallel
+      - python-pip
+      - python-virtualenv
+      - python-setuptools
+      - xz-utils
+      - tabix
+      - autoconf
+      - automake
+      - make
+      - gcc
+      - perl
+      - zlib1g-dev
+      - libbz2-dev
+      - liblzma-dev
+      - libcurl4-openssl-dev
+      - libssl-dev
+      - libperl-dev
+      - libgsl0-dev
+- name: Upgrade pip
+  pip:
+    name: pip
+    state: forcereinstall
+- name: Install common-packages
+  apt:
+    name:
+      - python3-venv
+      - python3-pip
+- name: Upgrade pip
+  pip:
+    name: pip
+    state: forcereinstall
+    executable: pip3
+
+- stat:
+    path: "{{ bin_dir }}/bcftools"
+  register: bcftools_installed
+- block:
+  - file:
+      dest: "{{ src_dir }}/bcftools"
+      state: directory
+      mode: '0755'
+  - file:
+      dest: "{{ build_dir }}/bcftools"
+      state: directory
+      mode: '0755'
+  - name: Uncompress bcftools
+    unarchive:
+      src: "https://github.com/samtools/bcftools/releases/download/{{ version }}/bcftools-{{ version }}.tar.bz2"
+      dest: "{{ src_dir }}"
+      remote_src: yes
+      creates: "{{ src_dir }}/bcftools-{{version}}/README"
+  - name: Build and Install bcftools
+    make:
+      chdir: "{{ src_dir }}/bcftools-{{version}}"
+      target: install
+      params:
+        prefix: "{{ build_dir }}/bcftools"
+  - file:
+      src: "{{ build_dir }}/bcftools/bin/bcftools"
+      dest: "{{ bin_dir }}/bcftools"
+      state: link
+  when: bcftools_installed.stat.exists == false

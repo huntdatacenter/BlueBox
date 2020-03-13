@@ -1,4 +1,5 @@
 ---
+# Prepare home node for connecting (keys)
 - hosts: localhost
   connection: local
   gather_facts: false
@@ -15,16 +16,11 @@
         groups: ["all", "nodes"]
       with_lines: cat ./hosts.txt
 
+# Prepare IAAS nodes
 - hosts: all
   become: yes
   connection: ssh
   gather_facts: true
-  vars:
-    - tmp_dir: /tmp
-    - src_dir: /usr/local/src
-    - build_dir: /usr/local/lib
-    - bin_dir: /usr/local/bin
-    - version: "1.10.2"
   tasks:
     - name: Set authorized key
       authorized_key:
@@ -34,80 +30,9 @@
       with_file:
         - './cluster-ssh-key.pub'
       tags: never, setupkeys
-    - name: Install common-packages
-      apt:
-        name:
-          - htop
-          - parallel
-          - python-pip
-          - python-virtualenv
-          - python-setuptools
-          - xz-utils
-          - tabix
-          - autoconf
-          - automake
-          - make
-          - gcc
-          - perl
-          - zlib1g-dev
-          - libbz2-dev
-          - liblzma-dev
-          - libcurl4-openssl-dev
-          - libssl-dev
-          - libperl-dev
-          - libgsl0-dev
-    - name: Upgrade pip
-      pip:
-        name: pip
-        state: forcereinstall
-    - name: Install common-packages
-      apt:
-        name:
-          - python3-venv
-          - python3-pip
-    - name: Upgrade pip
-      pip:
-        name: pip
-        state: forcereinstall
-        executable: pip3
-    - name: Copy requirements.txt
-      copy:
-        src: requirements.txt
-        dest: /tmp/requirements.txt
-    - name: Install pip packages
-      pip:
-        requirements: /tmp/requirements.txt
-        executable: "{{ item }}"
-      with_items:
-        - pip3
-        - pip
-
-    - stat:
-        path: "{{ bin_dir }}/bcftools"
-      register: bcftools_installed
-    - block:
-      - file:
-          dest: "{{ src_dir }}/bcftools"
-          state: directory
-          mode: '0755'
-      - file:
-          dest: "{{ build_dir }}/bcftools"
-          state: directory
-          mode: '0755'
-      - name: Uncompress bcftools
-        unarchive:
-          src: "https://github.com/samtools/bcftools/releases/download/{{ version }}/bcftools-{{ version }}.tar.bz2"
-          dest: "{{ src_dir }}"
-          remote_src: yes
-          creates: "{{ src_dir }}/bcftools-{{version}}/README"
-      - name: Build and Install bcftools
-        make:
-          chdir: "{{ src_dir }}/bcftools-{{version}}"
-          target: install
-          params:
-            prefix: "{{ build_dir }}/bcftools"
-      - file:
-          src: "{{ build_dir }}/bcftools/bin/bcftools"
-          dest: "{{ bin_dir }}/bcftools"
-          state: link
-      when: bcftools_installed.stat.exists == false
+    - name: Setup environment
+      include: includes/environment.yaml
+    - name: Setup python packages from files/requirements.txt
+      include: includes/python.yaml
+    - name: Setup bcftools
+      include: includes/bcftools.yaml

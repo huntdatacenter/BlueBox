@@ -1,0 +1,13 @@
+---
+# Install python packages from files/requirements.txt
+- name: Copy requirements.txt
+  copy:
+    src: requirements.txt
+    dest: /tmp/requirements.txt
+- name: Install pip packages
+  pip:
+    requirements: /tmp/requirements.txt
+    executable: "{{ item }}"
+  with_items:
+    - pip3
+    - pip
