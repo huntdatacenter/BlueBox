@@ -3,17 +3,17 @@
   connection: local
   gather_facts: false
   tasks:
-  - name: Generate ssh key if does not exist
-    openssh_keypair:
-      path: './files/cluster-ssh-key'
-      size: 4096
-    tags: never, setupkeys
-  - name: Add nodes to Ansible inventory
-    add_host:
-      hostname: "{{ item.split('@')[1].split(':')[0] if '@' in item else item.split('/')[1].split(':')[0] }}"
-      ansible_user: ubuntu
-      groups: ["all", "nodes"]
-    with_lines: cat ./hosts.txt
+    - name: Generate ssh key if does not exist
+      openssh_keypair:
+        path: './files/cluster-ssh-key'
+        size: 4096
+      tags: never, setupkeys
+    - name: Add nodes to Ansible inventory
+      add_host:
+        hostname: "{{ item.split('@')[1].split(':')[0] if '@' in item else item.split('/')[1].split(':')[0] }}"
+        ansible_user: ubuntu
+        groups: ["all", "nodes"]
+      with_lines: cat ./hosts.txt
 
 - hosts: all
   become: yes
