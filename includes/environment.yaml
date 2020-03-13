@@ -16,7 +16,6 @@
       - python-pip
       - python-virtualenv
       - python-setuptools
-      - python-jmespath
       - xz-utils
       - tabix
       - autoconf
@@ -40,7 +39,6 @@
     name:
       - python3-venv
       - python3-pip
-      - python3-jmespath
 - name: Upgrade pip
   pip:
     name: pip
