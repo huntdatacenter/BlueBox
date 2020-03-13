@@ -7,7 +7,7 @@ Example research setup for running workload over multiple IAAS nodes
 Setup local environment on your home server:
 
 ```
-sudo apt install pssh python3-venv python3-pip
+sudo apt install parallel pssh python3-venv python3-pip
 git clone https://github.com/huntdatacenter/IAAS-scibox-example.git
 cd IAAS-scibox-example
 python3 -m venv env
@@ -32,6 +32,7 @@ and try to connect to nodes and place the public key. Otherwise you should place
 key to `files/cluster-ssh-key` for Ansible to use it.
 
 ```
+source env/bin/activate  # Make sure you env is active
 ansible-playbook ansible.yaml -t setupkeys
 ```
 
@@ -42,6 +43,7 @@ Playbook includes:
 - bcftools
 
 ```
+source env/bin/activate  # Make sure you env is active
 ansible-playbook playbook.yaml
 ```
 
