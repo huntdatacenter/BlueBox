@@ -38,7 +38,7 @@
     - name: Setup bcftools
       include: includes/bcftools.yaml
     - name: Pull results
-      include: includes/pull.yaml
+      include: includes/pull_results.yaml
       tags: never, pull
     - name: Synchronize scripts
       synchronize:
@@ -50,5 +50,5 @@
   gather_facts: false
   tasks:
     - name: Push data
-      include: includes/push.yaml
+      include: includes/push_data.yaml
       tags: never, push
