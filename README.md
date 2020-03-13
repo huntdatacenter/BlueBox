@@ -74,11 +74,15 @@ ansible-playbook playbook.yaml
 ## Parallel workload
 
 To run a workload make sure that your own scripts and data are in place on remote nodes.
+We are providing example `tasks.txt`, with one command per line.
+
 Starting a workload on nodes:
 
 ```
-cat tasks.txt | parallel --sshloginfile hosts.txt -j1 {}
+cat tasks.txt | parallel --sshloginfile hosts.txt -j1 --no-run-if-empty
 ```
+
+(-j == 1 job per node)
 
 ## Simulate on local computer (notebook)
 
