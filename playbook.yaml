@@ -16,6 +16,9 @@
         groups: ["all", "nodes"]
       with_lines: cat ./hosts.txt
       tags: always
+    - name: Push data
+      include: includes/push_data.yaml
+      tags: never, push
 
 # Prepare IAAS nodes
 - hosts: all
@@ -45,6 +48,7 @@
         state: absent
         mode: '0755'
       tags: never, cleandata
+
     - name: Setup folders
       include: includes/folders.yaml
       tags: cleandata, cleanresults
@@ -56,10 +60,30 @@
         src: './code/'
         dest: /home/ubuntu/code/
 
-- hosts: localhost
-  connection: local
-  gather_facts: false
-  tasks:
-    - name: Push data
-      include: includes/push_data.yaml
-      tags: never, push
+    - name: Push ~/data to IAAS nodes
+      synchronize:
+        src: '{{ data_path }}'
+        dest: /home/ubuntu/
+      tags: never, pushsync
+
+    - name: List data
+      find:
+        paths: "/home/ubuntu/data"
+        depth: 2
+        recurse: yes
+        file_type: any
+      register: listing
+      tags: never, listdata, push
+    - name: List results
+      find:
+        paths: "/home/ubuntu/results"
+        depth: 2
+        recurse: yes
+        file_type: any
+      register: listing
+      tags: never, listresults, pull
+    - name: List of files
+      debug:
+        msg: "{{ listing | json_query('files[*].path') }}"
+      tags: never, listdata, listresults, push, pull
+      when: listing is succeeded

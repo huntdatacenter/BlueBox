@@ -89,6 +89,12 @@ ansible-playbook playbook.yaml -t cleandata
 ansible-playbook playbook.yaml -t cleanresults
 ```
 
+To debug content on remote servers list files:
+```
+ansible-playbook playbook.yaml -t listdata
+ansible-playbook playbook.yaml -t listresults
+```
+
 
 ## Parallel workload
 
