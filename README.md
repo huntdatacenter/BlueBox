@@ -4,15 +4,28 @@ Example research setup for running workload over multiple IAAS nodes
 
 ## Setup on home (master)
 
-Setup local environment on your home server:
+Install dependencies on your home server:
 
 ```
 sudo apt install parallel pssh python3-venv python3-pip
+```
+
+Get this repository:
+```
 git clone https://github.com/huntdatacenter/IAAS-scibox-example.git
 cd IAAS-scibox-example
+```
+
+Setup python environment:
+```
 python3 -m venv env
 source env/bin/activate
 pip3 install -r files/requirements.txt
+```
+
+When using ansible make sure your python environment is activated:
+```
+source env/bin/activate
 ```
 
 ## List of nodes - inventory
@@ -45,7 +58,6 @@ and try to connect to nodes and place the public key. Otherwise you should place
 key to `files/cluster-ssh-key` for Ansible to use it.
 
 ```
-source env/bin/activate  # Make sure you env is active
 ansible-playbook ansible.yaml -t setupkeys
 ```
 
@@ -56,7 +68,6 @@ Playbook includes:
 - bcftools
 
 ```
-source env/bin/activate  # Make sure you env is active
 ansible-playbook playbook.yaml
 ```
 
@@ -66,7 +77,6 @@ To run a workload make sure that your own scripts and data are in place on remot
 Starting a workload on nodes:
 
 ```
-ssh-add files/cluster-ssh-key
 cat tasks.txt | parallel --sshloginfile hosts.txt -j1 {}
 ```
 
