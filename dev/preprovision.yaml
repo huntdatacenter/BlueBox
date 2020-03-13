@@ -11,6 +11,10 @@
       src: './ubuntu-dev-ssh-key'
       dest: '../files/cluster-ssh-key'
       mode: '0600'
+  - copy:
+      src: '../files/hosts-example.txt'
+      dest: '../hosts.txt'
+      mode: '0600'
 
 - hosts: all
   become: true

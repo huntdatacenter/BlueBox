@@ -22,3 +22,5 @@ ubuntu-dev-ssh-key
 ubuntu-dev-ssh-key.pub
 cluster-ssh-key
 cluster-ssh-key.pub
+
+hosts.txt

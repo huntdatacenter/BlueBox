@@ -15,9 +15,9 @@ source env/bin/activate
 pip3 install -r files/requirements.txt
 ```
 
-## Setup on IAAS nodes (workers)
+## List of nodes - inventory
 
-Before using your IAAS nodes update the node list in `hosts.txt` in GNU parallel format.
+Before using your IAAS nodes create the node list in `hosts.txt`. Follow GNU parallel format.
 Where `N` is number of CPUs available, ubuntu is a user, and `node-X-IP` should be replace
 with IPs of nodes.
 
@@ -25,9 +25,16 @@ with IPs of nodes.
 N/ubuntu@node-1-IP
 N/ubuntu@node-2-IP
 ...
+N/ubuntu@node-X-IP
 ```
 
-### Provisioning
+Example hosts.txt:
+```
+8/ubuntu@192.168.150.11
+8/ubuntu@192.168.150.12
+```
+
+### Provisioning environment on IAAS nodes (workers)
 
 If you need to setup SSH keys run a playbook with tag `setupkeys`, which will generate a key
 and try to connect to nodes and place the public key. Otherwise you should place your private
