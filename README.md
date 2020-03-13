@@ -17,8 +17,12 @@ pip3 install -r files/requirements.txt
 
 ## List of nodes - inventory
 
-Before using your IAAS nodes create the node list in `hosts.txt`. Follow GNU parallel format.
-Where `N` is number of CPUs available, ubuntu is a user, and `node-X-IP` should be replace
+Before using your IAAS nodes create the node list in `hosts.txt`.
+```
+vim hosts.txt
+```
+
+Follow GNU parallel format. Where `N` is number of CPUs available, ubuntu is a user, and `node-X-IP` should be replace
 with IPs of nodes.
 
 ```
