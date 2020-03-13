@@ -9,7 +9,7 @@
         path: './files/cluster-ssh-key'
         size: 4096
       tags: never, setupkeys
-    - name: Add nodes to Ansible inventory
+    - name: Add IAAS nodes from hosts.txt to Ansible inventory
       add_host:
         hostname: "{{ item.split('@')[1].split(':')[0] if '@' in item else item.split('/')[1].split(':')[0] }}"
         ansible_user: ubuntu
