@@ -62,8 +62,8 @@
 
     - name: Push ~/data to IAAS nodes
       synchronize:
-        src: '{{ data_path }}'
-        dest: /home/ubuntu/
+        src: '{{ data_path }}/'
+        dest: /home/ubuntu/data
       tags: never, pushsync
 
     - name: List data
