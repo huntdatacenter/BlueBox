@@ -1,11 +1,6 @@
-(echo -n 'J01 - START - '; hostname | tr -d '\n'; echo -n ' - '; date; sleep 10; echo -n 'J01 - DONE - '; hostname | tr -d '\n'; echo -n ' - '; date)
-(echo -n 'J02 - START - '; hostname | tr -d '\n'; echo -n ' - '; date; sleep 2; echo -n 'J02 - DONE - '; hostname | tr -d '\n'; echo -n ' - '; date)
-(echo -n 'J03 - START - '; hostname | tr -d '\n'; echo -n ' - '; date; sleep 2; echo -n 'J03 - DONE - '; hostname | tr -d '\n'; echo -n ' - '; date)
-(echo -n 'J04 - START - '; hostname | tr -d '\n'; echo -n ' - '; date; sleep 2; echo -n 'J04 - DONE - '; hostname | tr -d '\n'; echo -n ' - '; date)
-(echo -n 'J05 - START - '; hostname | tr -d '\n'; echo -n ' - '; date; sleep 8; echo -n 'J05 - DONE - '; hostname | tr -d '\n'; echo -n ' - '; date)
-(echo -n 'J06 - START - '; hostname | tr -d '\n'; echo -n ' - '; date; sleep 5; echo -n 'J06 - DONE - '; hostname | tr -d '\n'; echo -n ' - '; date)
-(echo -n 'J07 - START - '; hostname | tr -d '\n'; echo -n ' - '; date; sleep 20; echo -n 'J07 - DONE - '; hostname | tr -d '\n'; echo -n ' - '; date)
-(echo -n 'J08 - START - '; hostname | tr -d '\n'; echo -n ' - '; date; sleep 15; echo -n 'J08 - DONE - '; hostname | tr -d '\n'; echo -n ' - '; date)
-(echo -n 'J09 - START - '; hostname | tr -d '\n'; echo -n ' - '; date; sleep 15; echo -n 'J09 - DONE - '; hostname | tr -d '\n'; echo -n ' - '; date)
-(echo -n 'J10 - START - '; hostname | tr -d '\n'; echo -n ' - '; date; sleep 15; echo -n 'J10 - DONE - '; hostname | tr -d '\n'; echo -n ' - '; date)
-(echo -n 'J11 - START - '; hostname | tr -d '\n'; echo -n ' - '; date; sleep 15; echo -n 'J11 - DONE - '; hostname | tr -d '\n'; echo -n ' - '; date)
+bash example.sh J01
+bash example.sh J02
+bash example.sh J03
+bash example.sh J04
+bash example.sh J05
+bash example.sh J06
