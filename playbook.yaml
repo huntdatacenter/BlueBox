@@ -41,6 +41,7 @@
           - parallel
           - python-pip
           - python-virtualenv
+          - python-setuptools
           - xz-utils
           - tabix
           - autoconf
