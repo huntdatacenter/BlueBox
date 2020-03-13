@@ -52,7 +52,7 @@ Starting a workload on nodes:
 
 ```
 ssh-add files/cluster-ssh-key
-cat tasks.txt | parallel --sshloginfile hosts.yaml -j1 {}
+cat tasks.txt | parallel --sshloginfile hosts.txt -j1 {}
 ```
 
 ## Simulate on local computer (notebook)

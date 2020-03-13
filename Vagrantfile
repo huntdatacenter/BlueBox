@@ -19,7 +19,6 @@ servers = [
 
 Vagrant.configure(2) do |config|
   servers.each do |opts|
-    # config.ssh.username = "ubuntu"
     config.vm.define opts[:name] do |box|
       box.vm.box = "bento/ubuntu-16.04"
       box.vm.hostname = opts[:name]
@@ -29,14 +28,10 @@ Vagrant.configure(2) do |config|
       box.vm.provision "ansible" do |ansible|
         ansible.playbook = "dev/preprovision.yaml"
         ansible.groups = { "vagrant" => ["all"] }
-        # ansible.limit = "vagrant"
       end
 
       box.vm.provision "ansible" do |ansible|
-        ansible.playbook = "ansible.yaml"
-        # ansible.groups = { "vagrant" => ["all"] }
-        # ansible.limit = "all"
-        # ansible.inventory_path = "hosts.ini"
+        ansible.playbook = "playbook.yaml"
       end
 
       box.vm.provider "virtualbox" do |v|
