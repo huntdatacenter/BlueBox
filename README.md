@@ -27,6 +27,8 @@ N/ubuntu@node-2-IP
 ...
 ```
 
+### Provisioning
+
 If you need to setup SSH keys run a playbook with tag `setupkeys`, which will generate a key
 and try to connect to nodes and place the public key. Otherwise you should place your private
 key to `files/cluster-ssh-key` for Ansible to use it.
