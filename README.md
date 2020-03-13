@@ -35,20 +35,18 @@ Before using your IAAS nodes create the node list in `hosts.txt`.
 vim hosts.txt
 ```
 
-Follow GNU parallel format. Where `N` is number of CPUs available, ubuntu is a user, and `node-X-IP` should be replace
-with IPs of nodes.
-
+Follow GNU parallel format. Where ubuntu is a user, and `node-X-IP` should be replace with IP addresses of nodes.
 ```
-N/ubuntu@node-1-IP
-N/ubuntu@node-2-IP
+ubuntu@node-1-IP
+ubuntu@node-2-IP
 ...
-N/ubuntu@node-X-IP
+ubuntu@node-X-IP
 ```
 
 Example hosts.txt:
 ```
-8/ubuntu@192.168.150.11
-8/ubuntu@192.168.150.12
+ubuntu@192.168.150.11
+ubuntu@192.168.150.12
 ```
 
 ### Provisioning environment on IAAS nodes (workers)

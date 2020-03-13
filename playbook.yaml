@@ -15,6 +15,10 @@
         ansible_user: ubuntu
         groups: ["all", "nodes"]
       with_lines: cat ./hosts.txt
+      tags: push, pull
+    - name: Push data
+      include: includes/push.yaml
+      tags: never, push
 
 # Prepare IAAS nodes
 - hosts: all
@@ -36,3 +40,10 @@
       include: includes/python.yaml
     - name: Setup bcftools
       include: includes/bcftools.yaml
+    - name: Pull results
+      include: includes/pull.yaml
+      tags: never, pull
+    - name: Synchronize scripts
+      synchronize:
+        src: './scripts'
+        dest: /home/ubuntu/
