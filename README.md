@@ -7,12 +7,12 @@ Example research setup for running workload over multiple IAAS nodes
 Setup local environment on your home server:
 
 ```
-sudo apt install pssh
+sudo apt install pssh python3-venv python3-pip
 git clone https://github.com/huntdatacenter/IAAS-scibox-example.git
 cd IAAS-scibox-example
-conda create -y --name env
-conda install -f -y -q --name env -c conda-forge --file files/requirements.txt
-conda activate env
+python3 -m venv env
+source env/bin/activate
+pip3 install -r files/requirements.txt
 ```
 
 ## Setup on IAAS nodes (workers)
