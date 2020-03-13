@@ -3,9 +3,9 @@
 taskid="$1"
 sleeptime="$(( RANDOM % 20 ))"
 
-echo "$(hostname)[START] - ${taskid}[$(date)]: sleep ${sleeptime}";
+echo "${taskid}[$(date)] - $(hostname): START - sleep ${sleeptime}";
 
 touch "/home/ubuntu/results/sleep-${taskid}-${sleeptime}"
 sleep ${sleeptime};
 
-echo "$(hostname)[DONE] - ${taskid}[$(date)]";
+echo "${taskid}[$(date)] - $(hostname): DONE";

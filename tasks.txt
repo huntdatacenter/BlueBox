@@ -4,3 +4,7 @@ bash example.sh J03
 bash example.sh J04
 bash example.sh J05
 bash example.sh J06
+bash example.sh J07
+bash example.sh J08
+bash example.sh J09
+bash example.sh J10
