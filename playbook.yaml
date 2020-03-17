@@ -16,9 +16,6 @@
         groups: ["all", "nodes"]
       with_lines: cat ./hosts.txt
       tags: always
-    - name: Push data
-      include: includes/push_data.yaml
-      tags: never, push
 
 # Prepare IAAS nodes
 - hosts: all
@@ -32,7 +29,8 @@
       include: includes/python.yaml
 
 - hosts: all
-  become: no
+  become: yes
+  become_user: ubuntu
   connection: ssh
   gather_facts: false
   tasks:
@@ -55,16 +53,14 @@
     - name: Pull results
       include: includes/pull_results.yaml
       tags: never, pull
-    - name: Synchronize scripts
+    - name: Push data
+      include: includes/push_data.yaml
+      tags: never, push
+    - name: Push code
       synchronize:
         src: './code/'
         dest: /home/ubuntu/code/
-
-    - name: Push ~/data to IAAS nodes
-      synchronize:
-        src: '{{ data_path }}/'
-        dest: /home/ubuntu/data
-      tags: never, pushsync
+      tags: code
 
     - name: List data
       find:
