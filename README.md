@@ -131,9 +131,10 @@ when they start and when they are done.
 
 ## Simulate on local computer (notebook)
 
-Requires Vagrant, VirtualBox, and Ansible to be installed. Vagrant will setup virtual
-machines that will be provisioned with our Ansible playbook.
+Requires Vagrant, VirtualBox, and Ansible to be installed. Vagrant will provide virtual
+machines with ubuntu, on which you can test your setup:
 ```
+cd scibox
 vagrant up
 vagrant status
 ```
