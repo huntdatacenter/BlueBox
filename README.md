@@ -2,12 +2,28 @@
 
 Example research setup for running workload over multiple IAAS nodes
 
+```
+scibox:~/scibox$ make
+lint                 Run linter
+setup                Setup nodes for use
+data                 Push data
+deps                 Install dependencies
+code                 Push code
+results              Pull results
+clean                Clean results remote
+list                 List results remote
+cleandata            Clean data remote
+listdata             List data remote
+run                  Run tasks.txt
+help                 Show this help
+```
+
 ## Setup on home (master)
 
 Install dependencies on your home server:
 
 ```
-sudo apt install parallel python3-tox
+sudo apt install python3-tox
 ```
 
 Get this repository:
@@ -23,15 +39,7 @@ Before using your IAAS nodes create the node list in `hosts.txt`.
 vim hosts.txt
 ```
 
-Follow GNU parallel format. Where ubuntu is a user, and `node-X-IP` should be replace with IP addresses of nodes.
-```
-ubuntu@node-1-IP
-ubuntu@node-2-IP
-...
-ubuntu@node-X-IP
-```
-
-Example hosts.txt:
+Follow example hosts:
 ```
 ubuntu@192.168.150.11
 ubuntu@192.168.150.12
@@ -39,48 +47,55 @@ ubuntu@192.168.150.12
 
 ### Provisioning environment on IAAS nodes (workers)
 
-If you need to setup SSH keys run a playbook with tag `setupkeys`, which will generate a key
-and try to connect to nodes and place the public key. Otherwise you should place your private
-key to `files/cluster-ssh-key` for Ansible to use it.
+When using first time or adding nodes run initial setup of IAAS nodes.
+- sets up ssh keys
+- common dependencies
+- code dependencies
 
 ```
-ansible-playbook playbook.yaml -t setupkeys
+make setup
 ```
 
-Then follow with installation of remote environments and dependencies for all nodes.
-Playbook includes:
-- python dependencies
-- tabix
-- bcftools
-
-Synchronizes scripts from `code` directory to remote servers.
+If you have specific dependencies for your code follow `default.packages.yml`
+when defining your own config `package.yml`. If you just need to update
+these dependencies run:
 
 ```
-ansible-playbook playbook.yaml
+make deps
 ```
 
-## Push data / pull results
-
-When pushing data and pulling results, set variables data_path and results_path respectively
-to your local path. On the server data will be available at /home/ubuntu/data,
-and your scripts should save results to /home/ubuntu/results
+Synchronize scripts from `code` directory to IAAS servers.
 
 ```
-ansible-playbook playbook.yaml -t push --extra-vars "data_path=./data"
-
-ansible-playbook playbook.yaml -t pull --extra-vars "results_path=./results"
+make code
 ```
 
-To remove your data or results run these command respectively:
+## Push data /
+
+To simply push data from ./data directory to remote nodes run:
+
 ```
-ansible-playbook playbook.yaml -t cleandata
-ansible-playbook playbook.yaml -t cleanresults
+make data
 ```
 
-To debug content on remote servers list files:
+If you need to remove the data from remote nodes:
+
 ```
-ansible-playbook playbook.yaml -t listdata
-ansible-playbook playbook.yaml -t listresults
+make cleandata
+```
+
+## Pull results
+
+To pull the results from remote nodes to ./results directory run:
+
+```
+make results
+```
+
+To clean the results on remote nodes after running pulling them:
+
+```
+make clean
 ```
 
 
@@ -99,7 +114,13 @@ bash example.sh J03
 Starting a workload on nodes:
 
 ```
-cat tasks.txt | parallel -j1 --ungroup --sshloginfile hosts.txt --no-run-if-empty --workdir /home/ubuntu/code
+make run
+```
+
+Which is wrapping distribution of tasks to hosts:
+
+```
+cat tasks.txt | parallel -j1 --ungroup --sshloginfile hosts.txt --no-run-if-empty --workdir /home/ubuntu/scibox
 ```
 
 - j: number of jobs per node
