@@ -1,18 +1,18 @@
 servers = [
     {
-        :name => "compute-1",
+        :name => "iaas-node-1",
         :ip => "192.168.150.11"
     },
     {
-        :name => "compute-2",
+        :name => "iaas-node-2",
         :ip => "192.168.150.12"
     },
     # {
-    #     :name => "compute-3",
+    #     :name => "iaas-node-3",
     #     :ip => "192.168.150.13"
     # },
     # {
-    #     :name => "compute-4",
+    #     :name => "iaas-node-4",
     #     :ip => "192.168.150.14"
     # }
 ]
@@ -30,14 +30,14 @@ Vagrant.configure(2) do |config|
         ansible.groups = { "vagrant" => ["all"] }
       end
 
-      box.vm.provision "ansible" do |ansible|
-        ansible.playbook = "playbook.yaml"
-      end
+      # box.vm.provision "ansible" do |ansible|
+      #   ansible.playbook = "playbook.yaml"
+      # end
 
       box.vm.provider "virtualbox" do |v|
           v.name = opts[:name]
-          v.memory = 512
-          v.cpus = 1
+          v.memory = 1024
+          v.cpus = 2
       end
     end
   end

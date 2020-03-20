@@ -1,106 +1,109 @@
-# IAAS-scibox-example
+# Scibox - IAAS toolkit
 
-Example research setup for running workload over multiple IAAS nodes
+Example research setup for running workload over multiple IAAS nodes.
+Distributing data, dependencies and code using ansible.
 
 ## Setup on home (master)
 
 Install dependencies on your home server:
 
 ```
-sudo apt install parallel pssh python3-venv python3-pip
+which tox || sudo apt install python3-tox
 ```
 
 Get this repository:
 ```
-git clone https://github.com/huntdatacenter/IAAS-scibox-example.git
-cd IAAS-scibox-example
+git clone https://github.com/huntdatacenter/scibox.git && cd scibox
 ```
 
-Setup python environment:
-```
-python3 -m venv env
-source env/bin/activate
-pip3 install -r files/requirements.txt
-```
+Use `code`, `data`, and `results` folders in the repository for synchronisation (read below).
+We provide basic examples, but otherwise are these folders excluded from git repository,
+so you can keep using them and get updates.
 
-When using ansible make sure your python environment is activated:
-```
-source env/bin/activate
-```
+Before using your IAAS nodes create the node list `vim hosts.txt`. Follow example hosts:
 
-## List of nodes - inventory
-
-Before using your IAAS nodes create the node list in `hosts.txt`.
-```
-vim hosts.txt
-```
-
-Follow GNU parallel format. Where ubuntu is a user, and `node-X-IP` should be replace with IP addresses of nodes.
-```
-ubuntu@node-1-IP
-ubuntu@node-2-IP
-...
-ubuntu@node-X-IP
-```
-
-Example hosts.txt:
 ```
 ubuntu@192.168.150.11
 ubuntu@192.168.150.12
+ubuntu@192.168.150.13
 ```
 
-### Provisioning environment on IAAS nodes (workers)
+## Usage
 
-If you need to setup SSH keys run a playbook with tag `setupkeys`, which will generate a key
-and try to connect to nodes and place the public key. Otherwise you should place your private
-key to `files/cluster-ssh-key` for Ansible to use it.
+Run `make` to get help on commands:
 
 ```
-ansible-playbook playbook.yaml -t setupkeys
+lint                 Run linter
+setup                Setup nodes for use
+data                 Push data
+deps                 Install dependencies
+code                 Push code
+results              Pull results
+clean                Clean results remote
+list                 List results remote
+cleandata            Clean data remote
+listdata             List data remote
+run                  Run tasks.txt
+help                 Show this help
 ```
 
-Then follow with installation of remote environments and dependencies for all nodes.
-Playbook includes:
-- python dependencies
-- tabix
-- bcftools
+### Setting up environment on IAAS nodes (workers)
 
-Synchronizes scripts from `code` directory to remote servers.
-
-```
-ansible-playbook playbook.yaml
-```
-
-## Push data / pull results
-
-When pushing data and pulling results, set variables data_path and results_path respectively
-to your local path. On the server data will be available at /home/ubuntu/data,
-and your scripts should save results to /home/ubuntu/results
+When using first time or adding nodes run initial setup of IAAS nodes.
+- sets up ssh keys
+- common dependencies
+- code dependencies
 
 ```
-ansible-playbook playbook.yaml -t push --extra-vars "data_path=./data"
-
-ansible-playbook playbook.yaml -t pull --extra-vars "results_path=./results"
+make setup
 ```
 
-To remove your data or results run these command respectively:
+### Dependencies
+
+If you have specific dependencies (apt, pip, R, or conda packages) for your
+code follow `default.packages.yml` when defining your own config `package.yml`.
+If you just need to update these dependencies, on nodes that already have
+been set up, run:
 ```
-ansible-playbook playbook.yaml -t cleandata
-ansible-playbook playbook.yaml -t cleanresults
+make deps
 ```
 
-To debug content on remote servers list files:
+### Push code
+
+Synchronise scripts from `code` directory to all IAAS servers:
 ```
-ansible-playbook playbook.yaml -t listdata
-ansible-playbook playbook.yaml -t listresults
+make code
+```
+
+### Push data
+
+To simply push data from ./data directory to remote nodes run:
+```
+make data
+```
+
+If you need to remove the data from remote nodes:
+```
+make cleandata
+```
+
+### Pull results
+
+To pull the results from remote nodes to ./results directory run:
+```
+make results
+```
+
+To clean the results on remote nodes after running pulling them:
+```
+make clean
 ```
 
 
-## Parallel workload
+## Run parallel workload
 
 To run a workload make sure that your own scripts and data are in place on remote nodes.
 We are providing example `tasks.txt`, with one command per line, e.g.:
-
 ```
 bash example.sh J01
 bash example.sh J02
@@ -109,14 +112,19 @@ bash example.sh J03
 ```
 
 Starting a workload on nodes:
-
 ```
-cat tasks.txt | parallel -j1 --ungroup --sshloginfile hosts.txt --no-run-if-empty --workdir /home/ubuntu/code
+make run
+```
+
+Command above is wrapping distribution of tasks to hosts using parallel, which shortcuts long version:
+```
+cat tasks.txt | parallel --ungroup --sshloginfile hosts.txt --no-run-if-empty --workdir /home/ubuntu/scibox
 ```
 
 - j: number of jobs per node
 - ungroup: immediate output in terminal, do not use if need output of jobs organised in groups
 - workdir: directory with scripts/code
+  [GNU Parallel - manual pages](https://www.gnu.org/software/parallel/man.html)
 
 In our example we just let the node sleep for some time and report which nodes are assigned jobs,
 when they start and when they are done.
@@ -125,11 +133,12 @@ when they start and when they are done.
 
 Requires Vagrant, VirtualBox, and Ansible to be installed. Vagrant will setup virtual
 machines that will be provisioned with our Ansible playbook.
-
 ```
 vagrant up
 vagrant status
+```
 
-# Test SSH access
-vagrant ssh compute-1
+Test SSH access:
+```
+vagrant ssh iaas-node-1
 ```

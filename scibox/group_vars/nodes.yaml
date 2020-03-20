@@ -1,0 +1,9 @@
+---
+ansible_connection: ssh
+ansible_user: ubuntu
+remote_code_path: ~/scibox
+remote_data_path: ~/scibox/data
+remote_results_path: ~/scibox/results
+local_code_path: ../code
+local_data_path: ../data
+local_results_path: ../results

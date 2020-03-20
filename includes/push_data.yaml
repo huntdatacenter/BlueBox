@@ -1,8 +1,0 @@
----
-- name: Push ~/data to IAAS nodes
-  command: "parallel-rsync -raz --hosts=hosts.txt {{ data_path }}/ /home/ubuntu/data"
-  register: parsync
-  ignore_errors: yes
-- name: Push ~/data to IAAS nodes
-  command: "ansible-playbook playbook.yaml -t pushsync --extra-vars 'data_path={{ data_path }}'"
-  when: parsync is failed

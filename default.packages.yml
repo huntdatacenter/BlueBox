@@ -1,0 +1,14 @@
+apt_packages:
+  - r-base
+python_pip_packages:
+  - name: pip
+    state: latest
+  - name: wheel
+    state: present
+  - name: tox
+    state: present
+r_packages:
+  - dplyr
+conda_packages:
+  - name: bcftools
+    channels: bioconda

@@ -1,0 +1,47 @@
+---
+- name: Install APT packages.
+  apt:
+    name: "{{ item.name | default(item) }}"
+    state: "{{ item.state | default('present') }}"
+    install_recommends: "{{ item.install_recommends | default('yes') }}"
+  with_items: "{{ apt_packages }}"
+  ignore_errors: yes
+
+- name: Install PIP packages (Python 2)
+  pip:
+    name: "{{ item.name | default(item) }}"
+    state: "{{ item.state | default('present') }}"
+    version: "{{ item.version | default(omit) }}"
+    executable: "/usr/local/bin/pip2"
+    extra_args: "--user"
+  with_items: "{{ python_pip_packages }}"
+  ignore_errors: yes
+
+- name: Install PIP packages (Python 3)
+  pip:
+    name: "{{ item.name | default(item) }}"
+    state: "{{ item.state | default('present') }}"
+    version: "{{ item.version | default(omit) }}"
+    executable: "/usr/local/bin/pip3"
+    extra_args: "--user"
+  with_items: "{{ python_pip_packages }}"
+  ignore_errors: yes
+
+# https://github.com/yutannihilation/ansible-module-cran
+- name: Install R packages
+  cran:
+    name: "{{ item.name | default(item) }}"
+    state: "{{ item.state | default('present') }}"
+  with_items: "{{ r_packages }}"
+
+# https://github.com/UDST/ansible-conda
+- name: Install Conda packages
+  become: no
+  conda:
+    name: "{{ item.name | default(item) }}"
+    state: "{{ item.state | default('present') }}"
+    version: "{{ item.version | default(omit) }}"
+    channels: "{{ item.channels | default(omit) }}"
+    extra_args: "{{ item.extra_args | default(omit) }}"
+    executable: "/home/{{ ansible_user }}/miniconda/bin/conda"
+  with_items: "{{ conda_packages }}"

@@ -1,0 +1,34 @@
+---
+# Prepare home node for connecting (keys)
+- hosts: localhost
+  connection: local
+  tasks:
+    - name: Add IAAS nodes from hosts.txt to Ansible inventory
+      add_host:
+        hostname: "{{ item.split('@')[1].split(':')[0] if '@' in item else item.split('/')[1].split(':')[0] }}"
+        ansible_user: ubuntu
+        groups: ["all", "nodes"]
+        ansible_ssh_private_key_file: "files/{{ ansible_user_id }}-ssh-key"
+        local_lab_user: "{{ ansible_user_id }}"
+      ignore_errors: yes
+      with_lines: cat ../hosts.txt
+      tags: always
+
+- hosts: nodes
+  become: yes
+  become_user: ubuntu
+  gather_facts: false
+  tasks:
+    - name: Setup folders
+      include: includes/folders.yaml
+    - name: Pull results
+      include: includes/pull_results.yaml
+      tags: never, pull
+    - name: Push data
+      include: includes/push_data.yaml
+      tags: never, push
+    - name: Push code
+      include: includes/push_code.yaml
+      tags: never, code
+    - name: Listing
+      include: includes/listing.yaml

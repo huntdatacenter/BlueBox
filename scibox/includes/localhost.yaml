@@ -1,0 +1,11 @@
+---
+# Local DEPENDENCIES and PACKAGES
+- name: Install local packages
+  apt:
+    name:
+      - python3-venv
+      - python3-pip
+      - parallel
+      - pssh
+  ignore_errors: yes
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'

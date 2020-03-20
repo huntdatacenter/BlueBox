@@ -1,0 +1,37 @@
+---
+# Default FOLDERS and PATHS
+- name: Cleanup Results
+  file:
+    dest: "{{ remote_results_path }}"
+    state: absent
+  tags: never, cleanresults
+- name: Cleanup data
+  file:
+    dest: "{{ remote_data_path }}"
+    state: absent
+  tags: never, cleandata
+
+- name: "Create code directory"
+  file:
+    dest: "{{ remote_code_path }}"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    state: directory
+    mode: '0700'
+  tags: always
+- name: "Create results directory"
+  file:
+    dest: "{{ remote_results_path }}"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    state: directory
+    mode: '0700'
+  tags: always
+- name: "Create data directory"
+  file:
+    dest: "{{ remote_data_path }}"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    state: directory
+    mode: '0700'
+  tags: always
