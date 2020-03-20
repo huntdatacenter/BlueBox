@@ -13,7 +13,7 @@ which tox || sudo apt install python3-tox
 
 Get this repository:
 ```
-git clone https://github.com/huntdatacenter/IAAS-scibox-example.git && cd IAAS-scibox-example
+git clone https://github.com/huntdatacenter/scibox.git && cd scibox
 ```
 
 Use `code`, `data`, and `results` folders in the repository for synchronisation (read below).
