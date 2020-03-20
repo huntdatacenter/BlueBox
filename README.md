@@ -1,4 +1,4 @@
-# IAAS-scibox-example
+# Scibox - IAAS toolkit
 
 Example research setup for running workload over multiple IAAS nodes.
 Distributing data, dependencies and code using ansible.
