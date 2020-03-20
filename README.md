@@ -7,25 +7,13 @@ Example research setup for running workload over multiple IAAS nodes
 Install dependencies on your home server:
 
 ```
-sudo apt install parallel pssh python3-venv python3-pip
+sudo apt install parallel python3-tox
 ```
 
 Get this repository:
 ```
 git clone https://github.com/huntdatacenter/IAAS-scibox-example.git
 cd IAAS-scibox-example
-```
-
-Setup python environment:
-```
-python3 -m venv env
-source env/bin/activate
-pip3 install -r files/requirements.txt
-```
-
-When using ansible make sure your python environment is activated:
-```
-source env/bin/activate
 ```
 
 ## List of nodes - inventory

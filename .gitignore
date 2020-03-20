@@ -1,8 +1,28 @@
+
+packages.yml
+
+files/hosts.ini
+**/*-ssh-key
+**/*-ssh-key.pub
+cluster-ssh-key
+cluster-ssh-key.pub
+
+hosts.txt
+/code/*
+!/code/.keep
+!/code/example.sh
+/results/*
+!/results/.keep
+/data/*
+!/data/.keep
+!/data/example
+
+
 # Ansible
 *.retry
 
 # Vagrant
-/.vagrant
+.vagrant
 
 # Venv
 /.env
@@ -17,27 +37,11 @@
 credentials/
 *.passwd
 
-files/hosts.ini
-ubuntu-dev-ssh-key
-ubuntu-dev-ssh-key.pub
-cluster-ssh-key
-cluster-ssh-key.pub
-
-hosts.txt
-/code/*
-!/code/.keep
-!/code/example.sh
-/results/*
-!/results/.keep
-/data/*
-!/data/.keep
-!/data/example
-
 # Vim
 *.swp
 
 # Tox working folder
-/.tox
+.tox
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

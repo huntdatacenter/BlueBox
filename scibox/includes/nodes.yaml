@@ -1,0 +1,83 @@
+---
+# DEPENDENCIES and PACKAGES
+- name: Install common-packages
+  apt:
+    name: "{{ default_apt_packages }}"
+
+# Pip installation - assure actual versions
+- name: Get PIP installation
+  get_url:
+    url: "https://bootstrap.pypa.io/get-pip.py"
+    dest: "/tmp/get-pip.py"
+    mode: '0777'
+  register: getpip
+- name: Install PIP (Python 2)
+  command:
+    cmd: /usr/bin/python2 /tmp/get-pip.py
+    creates: /usr/local/bin/pip2
+  when: getpip is not skipped
+- name: Install PIP (Python 3)
+  command:
+    cmd: /usr/bin/python3 /tmp/get-pip.py
+    creates: /usr/local/bin/pip3
+  when: getpip is not skipped
+
+- name: Install global PIP packages (Python 2)
+  pip:
+    name: "{{ default_pip_packages }}"
+    executable: /usr/local/bin/pip2
+  ignore_errors: yes
+- name: Install global PIP packages (Python 3)
+  pip:
+    name: "{{ default_pip_packages }}"
+    executable: /usr/local/bin/pip3
+  ignore_errors: yes
+
+# OTHER REPOSITORY KEY
+- name: Add 3.5 CRAN repository key
+  apt_key:
+    keyserver: "hkp://keyserver.ubuntu.com:80"
+    id: E298A3A825C0D65DFD57CBB651716619E084DAB9
+
+# OTHER REPOSITORIES
+- name: Add 3.5 CRAN repository
+  apt_repository:
+    repo: "deb https://cloud.r-project.org/bin/linux/ubuntu {{ ansible_distribution_release }}-cran35/"
+    filename: "{{ ansible_distribution_release }}-cran35"
+
+- name: Get miniconda script
+  get_url:
+    url: "https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh"
+    dest: /tmp/miniconda.sh
+    mode: '0777'
+
+- name: Install Miniconda
+  become: no
+  command:
+    cmd: bash /tmp/miniconda.sh -b -p /home/{{ ansible_user }}/miniconda
+    creates: /home/{{ ansible_user }}/miniconda/bin/conda
+
+- name: Install base condarc
+  become: no
+  copy: src=condarc dest=/home/{{ ansible_user }}/.condarc
+
+- name: Add miniconda to the PATH
+  become: no
+  lineinfile:
+    dest: "/home/{{ ansible_user }}/.bashrc"
+    line: export PATH=/home/{{ ansible_user }}/miniconda/bin:$PATH
+    state: present
+
+- name: Add scibox env SCIBOX_HOME
+  become: no
+  lineinfile:
+    dest: "/home/{{ ansible_user }}/.bashrc"
+    line: export SCIBOX_HOME=/home/{{ ansible_user }}/scibox
+    state: present
+
+- name: Add scibox to the PATH
+  become: no
+  lineinfile:
+    dest: "/home/{{ ansible_user }}/.bashrc"
+    line: export PATH=/home/{{ ansible_user }}/scibox:$PATH
+    state: present

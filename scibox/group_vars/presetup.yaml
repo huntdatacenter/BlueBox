@@ -1,0 +1,34 @@
+---
+ansible_connection: ssh
+ansible_user: ubuntu
+become: yes
+gather_facts: true
+default_apt_packages:
+  - htop
+  - parallel
+  - pssh
+  - sshpass
+  - build-essential
+  - python-setuptools
+  - python-apt
+  - python3-apt
+  - xz-utils
+  - tabix
+  - autoconf
+  - automake
+  - perl
+  - zlib1g-dev
+  - libbz2-dev
+  - liblzma-dev
+  - libcurl4-openssl-dev
+  - libssl-dev
+  - libperl-dev
+  - libgsl0-dev
+default_pip_packages:
+  - virtualenv
+  - setuptools
+  - wheel
+  - numpy
+  - pandas
+  - scipy
+  - jmespath

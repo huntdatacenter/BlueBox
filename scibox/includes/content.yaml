@@ -1,0 +1,22 @@
+---
+- name: List data
+  find:
+    paths: "/home/ubuntu/scibox/data"
+    depth: 3
+    recurse: yes
+    file_type: any
+  register: listing
+  tags: never, listdata, push
+- name: List results
+  find:
+    paths: "/home/ubuntu/scibox/results"
+    depth: 3
+    recurse: yes
+    file_type: any
+  register: listing
+  tags: never, listresults, pull
+- name: List
+  debug:
+    var: listing | json_query('files[*].path')
+  tags: never, listdata, listresults, push, pull
+  when: listing is succeeded

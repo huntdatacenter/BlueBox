@@ -1,5 +1,0 @@
----
-ansible_connection: ssh
-ansible_user: ubuntu
-ansible_ssh_private_key_file: files/cluster-ssh-key
-ansible_invetory: files/hosts.ini

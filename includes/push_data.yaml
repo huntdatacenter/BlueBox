@@ -1,5 +1,0 @@
----
-- name: Push ~/data to IAAS nodes
-  synchronize:
-    src: '{{ data_path }}/'
-    dest: /home/ubuntu/data

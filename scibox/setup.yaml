@@ -1,0 +1,63 @@
+---
+# Prepare home node for connecting (keys)
+- hosts: localhost
+  connection: local
+  tasks:
+    - name: Setup local dependencies
+      include: includes/localhost.yaml
+      tags: always
+    - name: Generate ssh key if does not exist
+      openssh_keypair:
+        path: 'files/{{ ansible_user_id }}-ssh-key'
+        size: 4096
+      tags: setupkeys
+    - name: Add IAAS nodes from hosts.txt to Ansible inventory
+      add_host:
+        hostname: "{{ item.split('@')[1].split(':')[0] if '@' in item else item.split('/')[1].split(':')[0] }}"
+        ansible_user: ubuntu
+        groups: ["all", "nodes"]
+        ansible_ssh_private_key_file: "files/{{ ansible_user_id }}-ssh-key"
+        local_lab_user: "{{ ansible_user_id }}"
+      ignore_errors: yes
+      with_lines: cat ../hosts.txt
+      tags: always
+    - name: Add IAAS nodes from hosts.txt to Ansible inventory
+      add_host:
+        hostname: "{{ item.split('@')[1].split(':')[0] if '@' in item else item.split('/')[1].split(':')[0] }}"
+        ansible_user: ubuntu
+        ansible_ssh_pass: ubuntu
+        local_lab_user: "{{ ansible_user_id }}"
+        # ansible_ssh_common_args: '-o PubkeyAuthentication=no -o PasswordAuthentication=yes'
+        groups: ["presetup"]
+      ignore_errors: yes
+      with_lines: cat ../hosts.txt
+      tags: setupkeys
+
+# Prepare IAAS nodes
+- hosts: presetup
+  tasks:
+    - name: Set authorized key
+      authorized_key:
+        user: "{{ ansible_user }}"
+        key: "{{ lookup('file', '{{ local_lab_user }}-ssh-key.pub') }}"
+        state: present
+        exclusive: no
+        comment: "{{ local_lab_user }}@scibox.iaas"
+      tags: setupkeys
+
+# Prepare IAAS nodes
+- hosts: nodes
+  become: yes
+  vars_files:
+    - ../default.packages.yml
+  pre_tasks:
+    - include_vars: "{{ item }}"
+      with_fileglob:
+        - "../packages.yml"
+      tags: ['always']
+  tasks:
+    - name: Setup node
+      include: includes/nodes.yaml
+    - name: Setup dependencies
+      include: includes/packages.yaml
+      tags: ['dep', 'deps', 'dependency']
