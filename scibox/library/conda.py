@@ -1,11 +1,11 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from distutils.spawn import find_executable
-import os.path
 import json
-from ansible.module_utils.basic import AnsibleModule
+import os.path
+from distutils.spawn import find_executable
 
+from ansible.module_utils.basic import AnsibleModule
 
 DOCUMENTATION = """
 ---
@@ -288,6 +288,7 @@ class CondaCommandError(Exception):
     """
     Error raised when a Conda command fails.
     """
+
     def __init__(self, command, stdout, stderr):
         self.command = command
         self.stdout = stdout
@@ -309,6 +310,7 @@ class CondaCommandJsonDescribedError(CondaCommandError):
     """
     Error raised when a Conda command does not output JSON.
     """
+
     def __init__(self, command, output, stderr):
         self.output = output
         super(CondaCommandJsonDescribedError, self).__init__(
@@ -320,6 +322,7 @@ class CondaPackageNotFoundError(Exception):
     Error raised when a Conda package has not been found
     in the package repositories that were searched.
     """
+
     def __int__(self, name, version):
         self.name = name
         self.version = version
@@ -334,6 +337,7 @@ class CondaUnexpectedOutputError(Exception):
     Error raised when the running of a Conda command
     has resulted in an unexpected output.
     """
+
     def __int__(self, output, stderr):
         self.output = output
         self.stderr = stderr
@@ -349,6 +353,7 @@ class CondaExecutableNotFoundError(Exception):
     """
     Error raised when the Conda executable was not found.
     """
+
     def __init__(self):
         super(CondaExecutableNotFoundError, self).__init__(
             'Conda executable not found.')
