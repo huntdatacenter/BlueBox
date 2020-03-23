@@ -8,6 +8,7 @@ cluster-ssh-key
 cluster-ssh-key.pub
 
 hosts.txt
+tasks.txt
 /code/*
 !/code/.keep
 !/code/example.sh

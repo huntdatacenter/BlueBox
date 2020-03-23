@@ -39,8 +39,8 @@ cleandata: ## Clean data remote
 listdata: ## List data remote
 	@tox -e playbook -- --tags=listdata
 
-run: ## Run tasks.txt
-	@cat tasks.txt | parallel -j1 --ungroup --sshloginfile hosts.txt --no-run-if-empty --workdir "/home/ubuntu/scibox"
+run: ## Run tasks.txt or default.tasks.txt
+	@cat tasks.txt 2>/dev/null || cat default.tasks.txt | parallel --ungroup --sshloginfile hosts.txt --no-run-if-empty --workdir "/home/ubuntu/scibox"
 
 run-all: data run results cleanresults
 

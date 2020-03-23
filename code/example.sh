@@ -1,11 +1,39 @@
 #!/usr/bin/env bash
 
-taskid="$1"
+# ----------------------- Description -------------------------------- #
+
+# This snippet provides a working example of code that is
+# pushed and executed on remote machines.
+
+# ----------------------- Input -------------------------------------- #
+
+default_taskid="$(uuidgen)"
+taskid="${1:-$default_taskid}"
 sleeptime="$(( RANDOM % 20 ))"
 
-echo "${taskid}[$(date)] - $(hostname): START - sleep ${sleeptime}";
+# ----------------------- Output file -------------------------------- #
 
-touch "${SCIBOX_HOME:-/home/ubuntu/scibox}/results/sleep-${taskid}-${sleeptime}"
-sleep ${sleeptime};
+output_file="results/${taskid}-output-example"
 
-echo "${taskid}[$(date)] - $(hostname): DONE";
+# ----------------------- Log ---------------------------------------- #
+
+function log {
+  echo "${taskid}[$(date '+%H:%M:%S.%N')] - $(hostname): ${@:2}" | tee "results/${output_file}.log"
+}
+
+# ----------------------- Main --------------------------------------- #
+
+# Write start time to log
+log "START" "sleep" ${sleeptime}
+
+# Write task id to screen
+echo "Running job $taskid"
+
+# Test output
+{ echo "stdout log"; echo "stderr log" 1>&2; } 1>> $output_file.out 2>> $output_file.err
+
+# Run your script
+sleep ${sleeptime} 1>> $output_file.out 2>> $output_file.err
+
+# Write end time to log
+log "END" "sleep" ${sleeptime}
