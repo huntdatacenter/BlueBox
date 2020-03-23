@@ -31,4 +31,6 @@ default_pip_packages:
   - numpy
   - pandas
   - scipy
+  - six
+  - tox
   - jmespath
