@@ -34,7 +34,7 @@ list: ## List results remote
 	@tox -e playbook -- --tags=listresults
 
 cleandata: ## Clean data remote
-	@tox -e playbook -- --tags=cleandata
+	@tox -e playbook -- --tags=cleandata -vv
 
 listdata: ## List data remote
 	@tox -e playbook -- --tags=listdata

@@ -34,8 +34,10 @@
   ignore_errors: yes
 
 - name: Get latest GNU Parallel
+  # become: yes
   unarchive:
-    src: http://ftp.gnu.org/gnu/parallel/parallel-latest.tar.bz2
+    src: https://ftp.gnu.org/gnu/parallel/parallel-20200322.tar.bz2
+    # http://ftp.gnu.org/gnu/parallel/parallel-latest.tar.bz2
     dest: /usr/local
     remote_src: yes
     extra_opts:
@@ -44,12 +46,11 @@
     creates: /usr/local/parallel
 
 - name: Install GNU Parallel
-  become: yes
-  command:
-    cmd: "./configure --prefix=/usr/local; make; make install"
-    creates: /usr/local/parallel/build
-  args:
-    chdir: "/usr/local/parallel"
+  # become: yes
+  shell:
+    cmd: "./configure; make; make install; make clean"
+    chdir: /usr/local/parallel
+    creates: /usr/local/bin/parallel
 
 # OTHER REPOSITORY KEY
 - name: Add 3.5 CRAN repository key
