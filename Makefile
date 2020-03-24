@@ -40,7 +40,8 @@ listdata: ## List data remote
 	@tox -e playbook -- --tags=listdata
 
 run: ## Run tasks.txt or default.tasks.txt
-	@cat tasks.txt 2>/dev/null || cat default.tasks.txt | parallel --ungroup --sshloginfile hosts.txt --no-run-if-empty --workdir "/home/ubuntu/scibox"
+	@ssh-add scibox/files/$$(whoami)-ssh-key >/dev/null 2>&1
+	@cat tasks.txt 2>/dev/null || cat default.tasks.txt | parallel --ungroup --no-run-if-empty --sshloginfile hosts.txt --workdir "/home/ubuntu/scibox"
 
 run-all: data run results cleanresults
 

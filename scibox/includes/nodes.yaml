@@ -2,7 +2,7 @@
 # DEPENDENCIES and PACKAGES
 - name: Install common-packages
   apt:
-    name: "{{ default_apt_packages }}"
+    name: "{{ common_apt_packages }}"
 
 # Pip installation - assure actual versions
 - name: Get PIP installation
@@ -24,14 +24,32 @@
 
 - name: Install global PIP packages (Python 2)
   pip:
-    name: "{{ default_pip_packages }}"
+    name: "{{ common_pip_packages }}"
     executable: /usr/local/bin/pip2
   ignore_errors: yes
 - name: Install global PIP packages (Python 3)
   pip:
-    name: "{{ default_pip_packages }}"
+    name: "{{ common_pip_packages }}"
     executable: /usr/local/bin/pip3
   ignore_errors: yes
+
+- name: Get latest GNU Parallel
+  unarchive:
+    src: http://ftp.gnu.org/gnu/parallel/parallel-latest.tar.bz2
+    dest: /usr/local
+    remote_src: yes
+    extra_opts:
+      - --transform
+      - s/-[0-9]\+//
+    creates: /usr/local/parallel
+
+- name: Install GNU Parallel
+  become: yes
+  command:
+    cmd: "./configure --prefix=/usr/local; make; make install"
+    creates: /usr/local/parallel/build
+  args:
+    chdir: "/usr/local/parallel"
 
 # OTHER REPOSITORY KEY
 - name: Add 3.5 CRAN repository key
@@ -44,6 +62,19 @@
   apt_repository:
     repo: "deb https://cloud.r-project.org/bin/linux/ubuntu {{ ansible_distribution_release }}-cran35/"
     filename: "{{ ansible_distribution_release }}-cran35"
+
+- name: Paralell rc directory
+  become: no
+  file:
+    path: "/home/{{ ansible_user }}/.parallel"
+    state: directory
+
+- name: Paralell confirm
+  become: no
+  file:
+    path: "/home/{{ ansible_user }}/.parallel/will-cite"
+    state: touch
+    mode: '0664'
 
 - name: Get miniconda script
   get_url:

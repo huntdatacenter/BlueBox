@@ -18,7 +18,8 @@ output_file="results/${taskid}-output-example"
 # ----------------------- Log ---------------------------------------- #
 
 function log {
-  echo "${taskid}[$(date '+%H:%M:%S.%N')] - $(hostname): ${@:2}" | tee "results/${output_file}.log"
+  # Log to file and also to stdout
+  echo "${taskid}[$(date '+%H:%M:%S.%N')] - $(hostname): ${@:2}" | tee "${output_file}.log"
 }
 
 # ----------------------- Main --------------------------------------- #
@@ -26,14 +27,11 @@ function log {
 # Write start time to log
 log "START" "sleep" ${sleeptime}
 
-# Write task id to screen
-echo "Running job $taskid"
-
 # Test output
-{ echo "stdout log"; echo "stderr log" 1>&2; } 1>> $output_file.out 2>> $output_file.err
+{ echo "stdout log"; echo "stderr log" 1>&2; } 1> "${output_file}.out" 2> "${output_file}.err"
 
 # Run your script
-sleep ${sleeptime} 1>> $output_file.out 2>> $output_file.err
+sleep ${sleeptime} 1>> "${output_file}.out" 2>> "${output_file}.err"
 
 # Write end time to log
 log "END" "sleep" ${sleeptime}

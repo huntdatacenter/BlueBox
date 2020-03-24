@@ -10,3 +10,23 @@
       - uuid
   ignore_errors: yes
   when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+- name: Get latest GNU Parallel
+  unarchive:
+    src: http://ftp.gnu.org/gnu/parallel/parallel-latest.tar.bz2
+    dest: /usr/local
+    remote_src: yes
+    extra_opts:
+      - --transform
+      - s/-[0-9]\+//
+    creates: /usr/local/parallel
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+- name: Install GNU Parallel
+  become: yes
+  command:
+    cmd: "./configure --prefix=/usr/local; make; make install"
+    creates: /usr/local/parallel/build
+  args:
+    chdir: "/usr/local/parallel"
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'

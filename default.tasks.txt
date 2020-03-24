@@ -1,4 +1,3 @@
-
 bash example.sh J01
 bash example.sh J02
 bash example.sh J03

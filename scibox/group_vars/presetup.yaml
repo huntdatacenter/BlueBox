@@ -3,7 +3,7 @@ ansible_connection: ssh
 ansible_user: ubuntu
 become: yes
 gather_facts: true
-default_apt_packages:
+common_apt_packages:
   - htop
   - parallel
   - pssh
@@ -12,6 +12,8 @@ default_apt_packages:
   - python-setuptools
   - python-apt
   - python3-apt
+  - python-dev
+  - python3-dev
   - xz-utils
   - tabix
   - autoconf
@@ -25,7 +27,8 @@ default_apt_packages:
   - libperl-dev
   - libgsl0-dev
   - uuid
-default_pip_packages:
+  - checkinstall
+common_pip_packages:
   - virtualenv
   - setuptools
   - wheel
