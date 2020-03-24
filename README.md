@@ -126,6 +126,12 @@ cat tasks.txt | parallel --ungroup --sshloginfile hosts.txt --no-run-if-empty --
 - workdir: directory with scripts/code
   [GNU Parallel - manual pages](https://www.gnu.org/software/parallel/man.html)
 
+To run all (clean, code, data, tasks, and results) commands use the shortcut:
+
+```
+make run-all
+```
+
 In our example we just let the node sleep for some time and report which nodes are assigned jobs,
 when they start and when they are done.
 

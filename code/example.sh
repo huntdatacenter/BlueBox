@@ -19,7 +19,7 @@ output_file="results/${taskid}-output-example"
 
 function log {
   # Log to file and also to stdout
-  echo "${taskid}[$(date '+%H:%M:%S.%N')] - $(hostname): ${@:2}" | tee "${output_file}.log"
+  echo "$(hostname)/${taskid}[$(date '+%H:%M:%S.%N')]: ${@:2}" | tee -a "${output_file}.log"
 }
 
 # ----------------------- Main --------------------------------------- #

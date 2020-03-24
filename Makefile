@@ -43,7 +43,7 @@ run: ## Run tasks.txt or default.tasks.txt
 	@ssh-add scibox/files/$$(whoami)-ssh-key >/dev/null 2>&1
 	@cat tasks.txt 2>/dev/null || cat default.tasks.txt | parallel --ungroup --no-run-if-empty --sshloginfile hosts.txt --workdir "/home/ubuntu/scibox"
 
-run-all: data run results cleanresults
+run-all: clean code data run results
 
 # Display target comments in 'make help'
 help: ## Show this help
