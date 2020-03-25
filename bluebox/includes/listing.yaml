@@ -1,7 +1,7 @@
 ---
 - name: List data
   find:
-    paths: "/home/ubuntu/scibox/data"
+    paths: "/home/ubuntu/bluebox/data"
     depth: 3
     recurse: yes
     file_type: any
@@ -9,7 +9,7 @@
   tags: never, listdata, push
 - name: List results
   find:
-    paths: "/home/ubuntu/scibox/results"
+    paths: "/home/ubuntu/bluebox/results"
     depth: 3
     recurse: yes
     file_type: any

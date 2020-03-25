@@ -100,16 +100,16 @@
     line: export PATH=/home/{{ ansible_user }}/miniconda/bin:$PATH
     state: present
 
-- name: Add scibox env SCIBOX_HOME
+- name: Add bluebox env SCIBOX_HOME
   become: no
   lineinfile:
     dest: "/home/{{ ansible_user }}/.bashrc"
-    line: export SCIBOX_HOME=/home/{{ ansible_user }}/scibox
+    line: export SCIBOX_HOME=/home/{{ ansible_user }}/bluebox
     state: present
 
-- name: Add scibox to the PATH
+- name: Add bluebox to the PATH
   become: no
   lineinfile:
     dest: "/home/{{ ansible_user }}/.bashrc"
-    line: export PATH=/home/{{ ansible_user }}/scibox:$PATH
+    line: export PATH=/home/{{ ansible_user }}/bluebox:$PATH
     state: present

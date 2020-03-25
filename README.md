@@ -13,7 +13,7 @@ which tox || sudo apt install python3-tox
 
 Get this repository:
 ```
-git clone https://github.com/huntdatacenter/scibox.git && cd scibox
+git clone https://github.com/huntdatacenter/bluebox.git && cd bluebox
 ```
 
 Use `code`, `data`, and `results` folders in the repository for synchronisation (read below).
@@ -61,7 +61,7 @@ make setup
 ### Dependencies
 
 If you have specific dependencies (apt, pip, R, or conda packages) for your
-code follow `default.packages.yml` when defining your own config `package.yml`.
+code follow `example.packages.yml` when defining your own config `package.yml`.
 If you just need to update these dependencies, on nodes that already have
 been set up, run:
 ```
@@ -118,7 +118,7 @@ make run
 
 Command above is wrapping distribution of tasks to hosts using parallel, which shortcuts long version:
 ```
-cat tasks.txt | parallel --ungroup --sshloginfile hosts.txt --no-run-if-empty --workdir /home/ubuntu/scibox
+cat tasks.txt | parallel --ungroup --sshloginfile hosts.txt --no-run-if-empty --workdir /home/ubuntu/bluebox
 ```
 
 - j: number of jobs per node
@@ -140,7 +140,7 @@ when they start and when they are done.
 Requires Vagrant, VirtualBox, and Ansible to be installed. Vagrant will provide virtual
 machines with ubuntu, on which you can test your setup:
 ```
-cd scibox
+cd bluebox
 vagrant up
 vagrant status
 ```

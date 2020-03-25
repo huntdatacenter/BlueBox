@@ -1,7 +1,7 @@
 ---
 - set_fact:
     local_path: "{{ code_path | default(local_code_path) }}"
-- name: Push code to IAAS nodes ({{ local_path | replace('../', '') }} -> ~/scibox)
+- name: Push code to IAAS nodes ({{ local_path | replace('../', '') }} -> ~/bluebox)
   become: no
   synchronize:
     src: "{{ local_path }}/"

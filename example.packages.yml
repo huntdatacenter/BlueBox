@@ -1,0 +1,13 @@
+# Documentation:
+# https://github.com/huntdatacenter/BlueBox/blob/master/docs/packages.md
+apt_packages:
+  - r-base
+python_pip_packages:
+  - pysam
+  - numpy
+  - pandas
+  - memory-profiler
+r_packages: []
+conda_packages:
+  - name: bcftools
+    channels: bioconda

@@ -28,4 +28,4 @@ repos:
     hooks:
       - id: yamllint
         # pre-commit only reads .yamllint
-        args: [--config-file=scibox/.yamllint.yaml]
+        args: [--config-file=bluebox/.yamllint.yaml]

@@ -39,9 +39,9 @@ cleandata: ## Clean data remote
 listdata: ## List data remote
 	@tox -e playbook -- --tags=listdata
 
-run: ## Run tasks.txt or default.tasks.txt
-	@ssh-add scibox/files/$$(whoami)-ssh-key >/dev/null 2>&1
-	@cat tasks.txt 2>/dev/null || cat default.tasks.txt | parallel --ungroup --no-run-if-empty --sshloginfile hosts.txt --workdir "/home/ubuntu/scibox"
+run: ## Run tasks.txt or example.tasks.txt
+	@ssh-add bluebox/files/$$(whoami)-ssh-key >/dev/null 2>&1
+	@cat tasks.txt 2>/dev/null || cat example.tasks.txt | parallel --ungroup --no-run-if-empty --sshloginfile hosts.txt --workdir "/home/ubuntu/bluebox"
 
 run-all: clean code data run results
 

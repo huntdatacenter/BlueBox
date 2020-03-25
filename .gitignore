@@ -24,6 +24,7 @@ tasks.txt
 
 # Vagrant
 .vagrant
+.ansible
 VirtualBox
 
 # Venv

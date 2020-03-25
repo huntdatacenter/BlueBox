@@ -1,7 +1,7 @@
 ---
 - set_fact:
     local_path: "{{ data_path | default(local_data_path) }}"
-- name: Push data to IAAS nodes ({{ local_path | replace('../', '') }} -> ~/scibox/data)
+- name: Push data to IAAS nodes ({{ local_path | replace('../', '') }} -> ~/bluebox/data)
   become: no
   synchronize:
     src: "{{ local_path }}/"

@@ -4,7 +4,7 @@
     name: "{{ item.name | default(item) }}"
     state: "{{ item.state | default('present') }}"
     install_recommends: "{{ item.install_recommends | default('yes') }}"
-  with_items: "{{ apt_packages }}"
+  with_items: "{{ apt_packages | default([]) }}"
   ignore_errors: yes
 
 - name: Install PIP packages (Python 2)
@@ -14,7 +14,7 @@
     version: "{{ item.version | default(omit) }}"
     executable: "/usr/local/bin/pip2"
     extra_args: "--user"
-  with_items: "{{ python_pip_packages }}"
+  with_items: "{{ python_pip_packages | default([]) }}"
   ignore_errors: yes
 
 - name: Install PIP packages (Python 3)
@@ -24,7 +24,7 @@
     version: "{{ item.version | default(omit) }}"
     executable: "/usr/local/bin/pip3"
     extra_args: "--user"
-  with_items: "{{ python_pip_packages }}"
+  with_items: "{{ python_pip_packages | default([]) }}"
   ignore_errors: yes
 
 # https://github.com/yutannihilation/ansible-module-cran
@@ -32,7 +32,8 @@
   cran:
     name: "{{ item.name | default(item) }}"
     state: "{{ item.state | default('present') }}"
-  with_items: "{{ r_packages }}"
+  with_items: "{{ r_packages | default([]) }}"
+  ignore_errors: yes
 
 # https://github.com/UDST/ansible-conda
 - name: Install Conda packages
@@ -44,4 +45,5 @@
     channels: "{{ item.channels | default(omit) }}"
     extra_args: "{{ item.extra_args | default(omit) }}"
     executable: "/home/{{ ansible_user }}/miniconda/bin/conda"
-  with_items: "{{ conda_packages }}"
+  with_items: "{{ conda_packages | default([]) }}"
+  ignore_errors: yes
