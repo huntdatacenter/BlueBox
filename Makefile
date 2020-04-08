@@ -5,9 +5,12 @@
 .DEFAULT_GOAL := help
 # Use bash shell in Make instead of sh
 SHELL := /bin/bash
-LOCAL_DATA_PATH := '../data'
-LOCAL_CODE_PATH := '../code'
-LOCAL_RESULTS_PATH := '../results'
+LOCAL_DATA_PATH ?= '../data'
+LOCAL_CODE_PATH ?= '../code'
+LOCAL_RESULTS_PATH ?= '../results'
+tasks := tasks.txt
+hosts := hosts.txt
+params := --ungroup
 
 lint: ## Run linter
 	@tox -e lint
@@ -40,8 +43,9 @@ listdata: ## List data remote
 	@tox -e playbook -- --tags=listdata
 
 run: ## Run tasks.txt or example.tasks.txt
+	@echo "Run: $(tasks)"
 	@ssh-add bluebox/files/$$(whoami)-ssh-key >/dev/null 2>&1
-	@cat tasks.txt 2>/dev/null || cat example.tasks.txt | parallel --ungroup --no-run-if-empty --sshloginfile hosts.txt --workdir "/home/ubuntu/bluebox"
+	@cat "$(tasks)" | parallel $(params) --no-run-if-empty --sshloginfile "$(hosts)" --workdir "/home/ubuntu/bluebox"
 
 run-all: clean code data run results
 

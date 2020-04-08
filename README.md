@@ -103,7 +103,7 @@ make clean
 ## Run parallel workload
 
 To run a workload make sure that your own scripts and data are in place on remote nodes.
-We are providing example `tasks.txt`, with one command per line, e.g.:
+We are providing example in `example.tasks.txt`, with one command per line, e.g.:
 ```
 bash example.sh J01
 bash example.sh J02
@@ -113,7 +113,7 @@ bash example.sh J03
 
 Starting a workload on nodes:
 ```
-make run
+make run tasks=example.tasks.txt
 ```
 
 Command above is wrapping distribution of tasks to hosts using parallel, which shortcuts long version:
