@@ -8,7 +8,7 @@ Distributing data, dependencies and code using ansible.
 Install dependencies on your home server:
 
 ```
-which tox || sudo apt install python3-tox
+which tox || sudo apt install tox
 ```
 
 Get this repository:
