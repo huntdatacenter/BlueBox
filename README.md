@@ -3,7 +3,7 @@
 Example research setup for running workload over multiple IAAS nodes.
 Distributing data, dependencies and code using ansible.
 
-## Setup on home (master)
+## Setup your home first (master)
 
 Install dependencies on your home server:
 

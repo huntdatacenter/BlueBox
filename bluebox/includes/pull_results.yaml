@@ -8,3 +8,4 @@
     dest: "{{ local_path }}"
     owner: no
     group: no
+    copy_links: yes

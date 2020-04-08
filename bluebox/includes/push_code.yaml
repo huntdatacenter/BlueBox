@@ -8,4 +8,5 @@
     dest: "{{ remote_code_path }}"
     owner: no
     group: no
+    copy_links: yes
     # group: "{{ ansible_user }}"
