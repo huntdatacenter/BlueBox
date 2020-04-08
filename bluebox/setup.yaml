@@ -2,6 +2,16 @@
 # Prepare home node for connecting (keys)
 - hosts: localhost
   connection: local
+  pre_tasks:
+  - name: Make sure pip, parallel and sshpass packages are installed
+    raw:
+      if [ test -e /usr/bin/apt-get ]; then
+          sudo apt-get -qqy update;
+          sudo apt-get install -qqy python3 sshpass parallel python3-venv python3-pip uuid pssh;
+      fi
+    register: output
+    changed_when: output.stdout != ""
+    ignore_errors: yes
   tasks:
     - name: Setup local dependencies
       include: includes/localhost.yaml
