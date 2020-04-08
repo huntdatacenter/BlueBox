@@ -1,6 +1,7 @@
 ---
 # Local DEPENDENCIES and PACKAGES
 - name: Install local packages
+  become: yes
   apt:
     name:
       - python3-venv
@@ -8,11 +9,12 @@
       - parallel
       - pssh
       - uuid
+      - sshpass
   ignore_errors: yes
   when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
 
 - name: Get latest GNU Parallel
-  # become: yes
+  become: yes
   unarchive:
     src: https://ftp.gnu.org/gnu/parallel/parallel-20200322.tar.bz2
     # http://ftp.gnu.org/gnu/parallel/parallel-latest.tar.bz2
@@ -23,13 +25,39 @@
       - s/-[0-9]\+//
     creates: /usr/local/parallel
   ignore_errors: yes
+  register: gpar_install
   when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
 
 - name: Install GNU Parallel
-  # become: yes
+  become: yes
   shell:
     cmd: "./configure; make; make install; make clean"
     chdir: /usr/local/parallel
     creates: /usr/local/bin/parallel
+  ignore_errors: yes
+  when: gpar_install is not skipped and gpar_install is succeeded
+
+- name: Paralell rc directory
+  become: no
+  file:
+    path: "/home/{{ ansible_user_id }}/.parallel"
+    state: directory
+  ignore_errors: yes
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+- name: Paralell confirm
+  become: no
+  file:
+    path: "/home/{{ ansible_user_id }}/.parallel/will-cite"
+    state: touch
+    mode: '0664'
+  ignore_errors: yes
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+- name: Paralell patch confirm
+  become: no
+  file:
+    path: "/home/{{ ansible_user_id }}/.parallel/runs-without-willing-to-cite"
+    state: absent
   ignore_errors: yes
   when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
