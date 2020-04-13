@@ -19,28 +19,28 @@ setup: ## Setup nodes for use
 	@tox -e setup -- --extra-vars "hosts_path=$(hosts)"
 
 data: ## Push data
-	@tox -e playbook -- --tags=push --extra-vars "data_path=$(LOCAL_DATA_PATH)"
+	@tox -e playbook -- --tags=push --extra-vars "data_path=$(LOCAL_DATA_PATH)" --extra-vars "hosts_path=$(hosts)"
 
 deps: ## Install dependencies
-	@tox -e setup -- --tags=deps --extra-vars "code_path=$(LOCAL_CODE_PATH)"
+	@tox -e setup -- --tags=deps --extra-vars "code_path=$(LOCAL_CODE_PATH)" --extra-vars "hosts_path=$(hosts)"
 
 code: ## Push code
-	@tox -e playbook -- --tags=code --extra-vars "code_path=$(LOCAL_CODE_PATH)"
+	@tox -e playbook -- --tags=code --extra-vars "code_path=$(LOCAL_CODE_PATH)" --extra-vars "hosts_path=$(hosts)"
 
 results: ## Pull results
-	@tox -e playbook -- --tags=pull --extra-vars "results_path=$(LOCAL_RESULTS_PATH)"
+	@tox -e playbook -- --tags=pull --extra-vars "results_path=$(LOCAL_RESULTS_PATH)" --extra-vars "hosts_path=$(hosts)"
 
 clean: ## Clean results remote
-	@tox -e playbook -- --tags=cleanresults
+	@tox -e playbook -- --tags=cleanresults --extra-vars "hosts_path=$(hosts)"
 
 list: ## List results remote
-	@tox -e playbook -- --tags=listresults
+	@tox -e playbook -- --tags=listresults --extra-vars "hosts_path=$(hosts)"
 
 cleandata: ## Clean data remote
-	@tox -e playbook -- --tags=cleandata -vv
+	@tox -e playbook -- --tags=cleandata -vv --extra-vars "hosts_path=$(hosts)"
 
 listdata: ## List data remote
-	@tox -e playbook -- --tags=listdata
+	@tox -e playbook -- --tags=listdata --extra-vars "hosts_path=$(hosts)"
 
 run: ## Run tasks.txt or example.tasks.txt
 	@echo "Run: $(tasks)"
