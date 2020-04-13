@@ -37,6 +37,7 @@
         ansible_user: ubuntu
         ansible_ssh_pass: ubuntu
         local_lab_user: "{{ ansible_user_id }}"
+        ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
         # ansible_ssh_common_args: '-o PubkeyAuthentication=no -o PasswordAuthentication=yes'
         groups: ["presetup"]
       ignore_errors: yes
