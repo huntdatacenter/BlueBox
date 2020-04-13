@@ -107,6 +107,13 @@
     line: export SCIBOX_HOME=/home/{{ ansible_user }}/bluebox
     state: present
 
+- name: Add BlueBoxMon
+  become: yes
+  copy:
+    src: blueboxmon
+    dest: /usr/local/bin/blueboxmon
+    mode: '0755'
+
 - name: Add bluebox to the PATH
   become: no
   lineinfile:

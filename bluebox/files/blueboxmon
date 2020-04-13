@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+# -u cpu util
+# -r mem util
+# -d i/o util
+# -p prettier
+# --human readable
+
+# S_COLORS=always sar -u -r -d -p --human 1 2 | grep -v "loop\|vda" | tail -n 9 | sed "s/Average://g"| sed '/^$/d'
+
+S_COLORS=always sar -u -r -d -p --human 1 2 | grep "^Average:" | grep -v "loop0" | sed "s/Average://g"

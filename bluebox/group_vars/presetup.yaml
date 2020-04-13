@@ -27,6 +27,7 @@ common_apt_packages:
   - libperl-dev
   - libgsl0-dev
   - uuid
+  - sysstat
 common_pip_packages:
   - virtualenv
   - setuptools
