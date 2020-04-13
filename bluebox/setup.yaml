@@ -21,7 +21,7 @@
         path: 'files/{{ ansible_user_id }}-ssh-key'
         size: 4096
       tags: setupkeys
-    - name: Add IAAS nodes from hosts.txt to Ansible inventory
+    - name: "Add IAAS nodes from {{ hosts_path | default('hosts.txt') }} to Ansible inventory"
       add_host:
         hostname: "{{ item.split('@')[1].split(':')[0] if '@' in item else item.split('/')[1].split(':')[0] }}"
         ansible_user: ubuntu
@@ -29,9 +29,9 @@
         ansible_ssh_private_key_file: "files/{{ ansible_user_id }}-ssh-key"
         local_lab_user: "{{ ansible_user_id }}"
       ignore_errors: yes
-      with_lines: cat ../hosts.txt
+      with_lines: "cat ../{{ hosts_path | default('hosts.txt') }}"
       tags: always
-    - name: Add IAAS nodes from hosts.txt to Ansible inventory
+    - name: "Add IAAS nodes from {{ hosts_path | default('hosts.txt') }} to Ansible inventory"
       add_host:
         hostname: "{{ item.split('@')[1].split(':')[0] if '@' in item else item.split('/')[1].split(':')[0] }}"
         ansible_user: ubuntu
@@ -40,7 +40,7 @@
         # ansible_ssh_common_args: '-o PubkeyAuthentication=no -o PasswordAuthentication=yes'
         groups: ["presetup"]
       ignore_errors: yes
-      with_lines: cat ../hosts.txt
+      with_lines: "cat ../{{ hosts_path | default('hosts.txt') }}"
       tags: setupkeys
 
 # Prepare IAAS nodes

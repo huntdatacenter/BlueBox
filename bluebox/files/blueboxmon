@@ -8,4 +8,4 @@
 
 # S_COLORS=always sar -u -r -d -p --human 1 2 | grep -v "loop\|vda" | tail -n 9 | sed "s/Average://g"| sed '/^$/d'
 
-S_COLORS=always sar -u -r -d -p --human 1 2 | grep "^Average:" | grep -v "loop0" | sed "s/Average://g"
+sar -u -r -d -p 1 2 | grep "^Average:" | grep -v "loop0" | sed "s/Average://g"

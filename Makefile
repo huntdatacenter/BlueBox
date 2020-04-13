@@ -1,6 +1,6 @@
 # Use one shell for all commands in a target recipe
 .ONESHELL:
-.PHONY: setup data code results cleandata cleanresults listdata listresults run run-all
+.PHONY: setup data code results cleandata cleanresults listdata listresults run run-all watch
 # Set default goal
 .DEFAULT_GOAL := help
 # Use bash shell in Make instead of sh
@@ -16,7 +16,7 @@ lint: ## Run linter
 	@tox -e lint
 
 setup: ## Setup nodes for use
-	@tox -e setup
+	@tox -e setup -- --extra-vars "hosts_path=$(hosts)"
 
 data: ## Push data
 	@tox -e playbook -- --tags=push --extra-vars "data_path=$(LOCAL_DATA_PATH)"
@@ -48,6 +48,9 @@ run: ## Run tasks.txt or example.tasks.txt
 	@cat "$(tasks)" | parallel $(params) --no-run-if-empty --sshloginfile "$(hosts)" --workdir "/home/ubuntu/bluebox"
 
 run-all: clean code data run results
+
+watch:
+	@watch -c -n 3 'pssh -h "$(hosts)" -P "blueboxmon" | sed -E "s/^([0-9.]+):/\1:\n/g" | grep -v SUCCESS'
 
 # Display target comments in 'make help'
 help: ## Show this help
