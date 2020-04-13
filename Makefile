@@ -50,7 +50,7 @@ run: ## Run tasks.txt or example.tasks.txt
 run-all: clean code data run results
 
 watch:
-	@watch -c -n 3 'pssh -h "$(hosts)" -P "blueboxmon" | sed -E "s/^([0-9.]+):/\1:\n/g" | grep -v SUCCESS'
+	@watch -c -n 3 'pssh -h "$(hosts)" -P "S_COLORS=always blueboxmon" | sed -E "s/^([0-9.]+):/\1:\n/g" | grep -v SUCCESS'
 
 # Display target comments in 'make help'
 help: ## Show this help
