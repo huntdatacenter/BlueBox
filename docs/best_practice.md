@@ -11,3 +11,8 @@ or with absolute path `python3 /home/ubuntu/bluebox/analysis.py`.
 Correct your inputs, e.g. `data/my-input-file` (absolute: `/home/ubuntu/bluebox/data/my-input-file`).
 
 Correct output results, e.g. `results/my-result-file` (absolute: `results/my-result-file`).
+
+Running analysis unattached, example:
+```
+nohup setsuid make run
+```
