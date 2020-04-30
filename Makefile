@@ -1,6 +1,6 @@
 # Use one shell for all commands in a target recipe
 .ONESHELL:
-.PHONY: setup data code results cleandata cleanresults listdata listresults run run-all retry resume watch
+.PHONY: setup data code results cleandata cleanresults listdata listresults run run-all retry resume ssh watch
 # Set default goal
 .DEFAULT_GOAL := help
 # Use bash shell in Make instead of sh
