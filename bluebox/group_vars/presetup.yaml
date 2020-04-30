@@ -15,7 +15,6 @@ common_apt_packages:
   - python-dev
   - python3-dev
   - xz-utils
-  - tabix
   - autoconf
   - automake
   - perl
@@ -26,6 +25,7 @@ common_apt_packages:
   - libssl-dev
   - libperl-dev
   - libgsl0-dev
+  - rng-tools
   - uuid
   - sysstat
 common_pip_packages:

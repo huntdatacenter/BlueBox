@@ -2,6 +2,7 @@
 # https://github.com/huntdatacenter/BlueBox/blob/master/docs/packages.md
 apt_packages:
   - r-base
+  - tabix
 python_pip_packages:
   - pysam
   - numpy
