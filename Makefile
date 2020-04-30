@@ -8,6 +8,7 @@ SHELL := /bin/bash
 LOCAL_DATA_PATH ?= '../data'
 LOCAL_CODE_PATH ?= '../code'
 LOCAL_RESULTS_PATH ?= '../results'
+USER ?= $$(whoami)
 tasks := tasks.txt
 hosts := hosts.txt
 params := --ungroup --no-run-if-empty --filter-hosts
@@ -57,6 +58,9 @@ retry: run
 
 resume: params += --resume
 resume: run
+
+ssh:
+	@ssh -i bluebox/files/$(USER)-ssh-key ubuntu@$(host)
 
 watch:
 	@watch -c -n 3 "pssh -h \"$(hosts)\" -x \"-i bluebox/files/$$(whoami)-ssh-key\" -P 'S_COLORS=always blueboxmon' | sed -E 's/^([0-9.]+):/\1:\n/g' | grep -v SUCCESS"
