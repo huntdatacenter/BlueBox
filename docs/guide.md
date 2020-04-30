@@ -112,3 +112,9 @@ Custom hosts file:
 ```
 make run hosts=clusterA.txt
 ```
+
+## Follow up
+
+- [Best practices](https://github.com/huntdatacenter/BlueBox/blob/master/docs/best_practice.md)
+- [FAQ - Frequently asked questions](https://github.com/huntdatacenter/BlueBox/blob/master/docs/faq.md)
+- [Packages](https://github.com/huntdatacenter/BlueBox/blob/master/docs/packages.md)
