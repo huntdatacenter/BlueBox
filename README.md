@@ -9,7 +9,7 @@ Handling data, code and results is still as easy as with single machine.
 Install dependencies on your home server:
 
 ```
-which tox || sudo apt install tox
+sudo apt update && sudo apt install -y tox sshpass
 ```
 
 Get this repository:
