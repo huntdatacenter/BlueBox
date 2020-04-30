@@ -89,3 +89,26 @@ To clean the results on remote nodes after running pulling them:
 ```
 make clean
 ```
+
+## Using parameters
+
+Retry failed:
+
+```
+make retry
+```
+
+Resume stopped
+```
+make resume
+```
+
+Custom tasks file:
+```
+make run tasks=tasks2.txt
+```
+
+Custom hosts file:
+```
+make run hosts=clusterA.txt
+```
