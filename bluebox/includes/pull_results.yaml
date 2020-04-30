@@ -16,4 +16,4 @@
       - "--exclude=.git"
       - "--itemize-changes"
       - "--backup"
-      - "--suffix=.{{ timestamp }}.conflict"
+      - "--suffix=.{{ timestamp }}.conflict"  # may remove if too many conflicts to handle

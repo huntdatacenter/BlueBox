@@ -1,4 +1,5 @@
 
+
 packages.yml
 
 files/hosts.ini
@@ -6,6 +7,10 @@ files/hosts.ini
 **/*-ssh-key.pub
 cluster-ssh-key
 cluster-ssh-key.pub
+
+task*.log
+hosts*.txt
+tasks*.txt
 
 hosts.txt
 tasks.txt

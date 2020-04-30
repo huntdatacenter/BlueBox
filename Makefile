@@ -1,6 +1,6 @@
 # Use one shell for all commands in a target recipe
 .ONESHELL:
-.PHONY: setup data code results cleandata cleanresults listdata listresults run run-all watch
+.PHONY: setup data code results cleandata cleanresults listdata listresults run run-all retry resume watch
 # Set default goal
 .DEFAULT_GOAL := help
 # Use bash shell in Make instead of sh
@@ -10,7 +10,8 @@ LOCAL_CODE_PATH ?= '../code'
 LOCAL_RESULTS_PATH ?= '../results'
 tasks := tasks.txt
 hosts := hosts.txt
-params := --ungroup
+params := --ungroup --no-run-if-empty --filter-hosts
+log := task.log
 
 lint: ## Run linter
 	@tox -e lint
@@ -44,10 +45,18 @@ listdata: ## List data remote
 
 run: ## Run tasks.txt or example.tasks.txt
 	@echo "Run: $(tasks)"
+	@eval $$(ssh-agent -s) >/dev/null 2>&1
 	@ssh-add bluebox/files/$$(whoami)-ssh-key >/dev/null 2>&1
-	@cat "$(tasks)" | parallel $(params) --no-run-if-empty --sshloginfile "$(hosts)" --workdir "/home/ubuntu/bluebox"
+	@parallel $(params) --joblog $(log) --sshloginfile "$(hosts)" --workdir "/home/ubuntu/bluebox" :::: "$(tasks)"
 
 run-all: clean code data run results
+
+retry: params += --retry-failed
+retry: params += --retries 3
+retry: run
+
+resume: params += --resume
+resume: run
 
 watch:
 	@watch -c -n 3 "pssh -h \"$(hosts)\" -x \"-i bluebox/files/$$(whoami)-ssh-key\" -P 'S_COLORS=always blueboxmon' | sed -E 's/^([0-9.]+):/\1:\n/g' | grep -v SUCCESS"
