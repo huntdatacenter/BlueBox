@@ -59,13 +59,14 @@
 # Prepare IAAS nodes
 - hosts: nodes
   become: yes
-  vars_files:
-    - ../example.packages.yml
   pre_tasks:
-    - include_vars: "{{ item }}"
-      with_fileglob:
-        - "../packages.yml"
-      tags: ['always']
+    - name: "Include vars from: packages.yml"
+      include_vars: "{{ lookup('first_found', possible_files) }}"
+      vars:
+        possible_files:
+          - "../packages.yml"
+          - "../example.packages.yml"
+      tags: 'always'
   tasks:
     - name: Setup node
       include: includes/nodes.yaml
