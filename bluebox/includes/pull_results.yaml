@@ -1,6 +1,7 @@
 ---
 - set_fact:
     local_path: "{{ results_path | default(local_results_path) }}"
+    timestamp: "{{ lookup('pipe','date +%Y-%m-%d-%H-%M-%S') }}"
 - name: Pull results from IAAS nodes ({{ remote_results_path }} -> {{ local_path | replace('../', '') }})
   synchronize:
     mode: pull
@@ -8,4 +9,11 @@
     dest: "{{ local_path }}"
     owner: no
     group: no
+    recursive: true
     copy_links: yes
+    rsync_opts:
+      - "--no-motd"
+      - "--exclude=.git"
+      - "--itemize-changes"
+      - "--backup"
+      - "--suffix=.{{ timestamp }}.conflict"

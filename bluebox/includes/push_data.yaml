@@ -9,3 +9,7 @@
     owner: no
     group: no
     copy_links: yes
+    partial: yes
+    rsync_opts:
+      - "--no-motd"
+      - "--exclude=.git"
