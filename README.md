@@ -31,6 +31,10 @@ ubuntu@192.168.150.13
 
 ## Usage
 
+- [Guide](https://github.com/huntdatacenter/BlueBox/blob/master/docs/guide.md)
+- [Best practices](https://github.com/huntdatacenter/BlueBox/blob/master/docs/best_practice.md)
+- [FAQ - Frequently asked questions](https://github.com/huntdatacenter/BlueBox/blob/master/docs/faq.md)
+
 Run `make` to get help on commands:
 
 ```
@@ -119,7 +123,7 @@ make run tasks=example.tasks.txt
 
 Command above is wrapping distribution of tasks to hosts using parallel, which shortcuts long version:
 ```
-cat tasks.txt | parallel --ungroup --sshloginfile hosts.txt --no-run-if-empty --workdir /home/ubuntu/bluebox
+parallel --ungroup --joblog task.log --sshloginfile hosts.txt --no-run-if-empty --workdir /home/ubuntu/bluebox :::: tasks.txt
 ```
 
 - j: number of jobs per node
