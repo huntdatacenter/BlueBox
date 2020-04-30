@@ -1,7 +1,8 @@
 # BlueBox - IAAS toolkit
 
-Example research setup for running workload over multiple IAAS nodes.
-Distributing data, dependencies and code using ansible.
+BlueBox helps to move into distributed compute with your research workload.
+It simplifies installation of dependency packages on multiple servers.
+Handling data, code and results is still as easy as with single machine.
 
 ## Setup your home first (master)
 
@@ -134,18 +135,3 @@ make run-all
 
 In our example we just let the node sleep for some time and report which nodes are assigned jobs,
 when they start and when they are done.
-
-## Simulate on local computer (notebook)
-
-Requires Vagrant, VirtualBox, and Ansible to be installed. Vagrant will provide virtual
-machines with ubuntu, on which you can test your setup:
-```
-cd bluebox
-vagrant up
-vagrant status
-```
-
-Test SSH access:
-```
-vagrant ssh iaas-node-1
-```
