@@ -1,17 +1,18 @@
 # Use one shell for all commands in a target recipe
 .ONESHELL:
-.PHONY: setup data code results cleandata cleanresults listdata listresults run run-all retry resume ssh watch
+.PHONY: env lint setup data code results cleandata cleanresults listdata listresults run run-all retry resume ssh watch
 # Set default goal
 .DEFAULT_GOAL := help
 # Use bash shell in Make instead of sh
 SHELL := /bin/bash
+export USER ?= $$(whoami)
+export PARALLEL_USER = $(USER)
 LOCAL_DATA_PATH ?= '../data'
 LOCAL_CODE_PATH ?= '../code'
 LOCAL_RESULTS_PATH ?= '../results'
-USER ?= $$(whoami)
 tasks := tasks.txt
 hosts := hosts.txt
-params := --ungroup --no-run-if-empty --filter-hosts
+params := --env PARALLEL_USER --ungroup --no-run-if-empty --filter-hosts
 log := task.log
 
 lint: ## Run linter

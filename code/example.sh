@@ -7,19 +7,22 @@
 
 # ----------------------- Input -------------------------------------- #
 
-default_taskid="$(uuidgen)"
-taskid="${1:-$default_taskid}"
+PARALLEL_HOST=$(hostname)
+JOB_ID="${PARALLEL_PID:-0}-${PARALLEL_SEQ:-0}"
 sleeptime="$(( RANDOM % 20 ))"
 
 # ----------------------- Output file -------------------------------- #
 
-output_file="results/${taskid}-output-example"
+output_file="results/${JOB_ID}-output-example"
+std_output="${output_file}.out"
+err_output="${output_file}.err"
 
 # ----------------------- Log ---------------------------------------- #
 
 function log {
   # Log to file and also to stdout
-  echo "$(hostname)/${taskid}[$(date '+%H:%M:%S.%N')]: ${@:2}" | tee -a "${output_file}.log"
+  TIMESTAMP=$(date '+%H:%M:%S.%N')
+  echo "${PARALLEL_HOST}/${JOB_ID}[${TIMESTAMP}]: ${@:2}" | tee -a "${output_file}.log"
 }
 
 # ----------------------- Main --------------------------------------- #
@@ -27,11 +30,11 @@ function log {
 # Write start time to log
 log "START" "sleep" ${sleeptime}
 
-# Test output
-{ echo "stdout log"; echo "stderr log" 1>&2; } 1> "${output_file}.out" 2> "${output_file}.err"
+# Test output redirection to log files
+{ echo "stdout log"; env; echo "stderr log" 1>&2; } 1> "${std_output}" 2> "${err_output}"
 
 # Run your script
-sleep ${sleeptime} 1>> "${output_file}.out" 2>> "${output_file}.err"
+sleep ${sleeptime} 1>> "${std_output}" 2>> "${err_output}"
 
 # Write end time to log
 log "END" "sleep" ${sleeptime}
