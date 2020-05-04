@@ -13,7 +13,7 @@ LOCAL_RESULTS_PATH ?= '../results'
 tasks := tasks.txt
 hosts := hosts.txt
 params := --env PARALLEL_USER --ungroup --no-run-if-empty --filter-hosts
-log := task.log
+joblog := task.log
 
 lint: ## Run linter
 	@tox -e lint
@@ -45,11 +45,11 @@ cleandata: ## Clean data remote
 listdata: ## List data remote
 	@tox -e playbook -- --tags=listdata --extra-vars "hosts_path=$(hosts)"
 
-run: ## Run tasks.txt or example.tasks.txt
+run: ## Run tasks.txt (Optional: params,tasks,hosts,joblog)
 	@echo "Run: $(tasks)"
 	@eval $$(ssh-agent -s) >/dev/null 2>&1
 	@ssh-add bluebox/files/$$(whoami)-ssh-key >/dev/null 2>&1
-	@parallel $(params) --joblog $(log) --sshloginfile "$(hosts)" --workdir "/home/ubuntu/bluebox" :::: "$(tasks)"
+	@parallel $(params) --joblog $(joblog) --sshloginfile "$(hosts)" --workdir "/home/ubuntu/bluebox" :::: "$(tasks)"
 
 run-all: clean code data run results
 
