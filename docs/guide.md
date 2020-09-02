@@ -24,6 +24,9 @@ been set up, run:
 make deps
 ```
 
+Read more about defining
+[Package dependencies](https://github.com/huntdatacenter/BlueBox/blob/master/docs/packages.md).
+
 ## 3. Push code
 
 Synchronise scripts from `code` directory to all IAAS servers:
@@ -59,24 +62,29 @@ Starting a workload on nodes:
 make run tasks=example.tasks.txt
 ```
 
-Command above is wrapping distribution of tasks to hosts using parallel, which shortcuts long version:
+Command above `make run` is wrapping distribution of tasks to hosts using
+[Parallel](https://www.gnu.org/software/parallel/man.html#NAME), which shortcuts long version:
 ```
 parallel --ungroup --joblog task.log --sshloginfile hosts.txt --no-run-if-empty --workdir /home/ubuntu/bluebox :::: tasks.txt
 ```
 
-- j: number of jobs per node
-- ungroup: immediate output in terminal, do not use if need output of jobs organised in groups
-- workdir: directory with scripts/code
-  [GNU Parallel - manual pages](https://www.gnu.org/software/parallel/man.html)
-
 To run all (clean, code, data, tasks, and results) commands use the shortcut:
-
 ```
 make run-all
 ```
 
 In our example we just let the node sleep for some time and report which nodes are assigned jobs,
 when they start and when they are done.
+
+Retry failed tasks using job log (task.log):
+```
+make retry
+```
+
+Resume run when parallel got stopped or interrupted:
+```
+make resume
+```
 
 ## 6. Pull results
 
@@ -90,18 +98,10 @@ To clean the results on remote nodes after running pulling them:
 make clean
 ```
 
+---
+
 ## Using parameters
 
-Retry failed:
-
-```
-make retry
-```
-
-Resume stopped
-```
-make resume
-```
 
 Custom tasks file:
 ```
@@ -113,8 +113,12 @@ Custom hosts file:
 make run hosts=clusterA.txt
 ```
 
+---
+
 ## Follow up
 
 - [Best practices](https://github.com/huntdatacenter/BlueBox/blob/master/docs/best_practice.md)
 - [FAQ - Frequently asked questions](https://github.com/huntdatacenter/BlueBox/blob/master/docs/faq.md)
-- [Packages](https://github.com/huntdatacenter/BlueBox/blob/master/docs/packages.md)
+- [Package dependencies](https://github.com/huntdatacenter/BlueBox/blob/master/docs/packages.md)
+
+- [GNU Parallel - Guides](https://www.gnu.org/software/parallel/parallel_tutorial.html)
