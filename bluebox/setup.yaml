@@ -47,6 +47,12 @@
 # Prepare IAAS nodes
 - hosts: presetup
   tasks:
+    - become: yes
+      group:
+        name: docker
+        state: present
+      ignore_errors: yes
+      register: dockergroup
     - name: Set authorized key
       authorized_key:
         user: "{{ ansible_user }}"
@@ -55,6 +61,13 @@
         exclusive: no
         comment: "{{ local_lab_user }}@bluebox.iaas"
       tags: setupkeys
+    - become: yes
+      user:
+        name: "{{ ansible_user }}"
+        groups: docker
+        append: yes
+      ignore_errors: yes
+      when: dockergroup is not skipped and dockergroup is successful
 
 # Prepare IAAS nodes
 - hosts: nodes
