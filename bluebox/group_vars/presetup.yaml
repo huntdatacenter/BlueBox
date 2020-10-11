@@ -28,6 +28,11 @@ common_apt_packages:
   - rng-tools
   - uuid
   - sysstat
+  - apt-transport-https
+  - ca-certificates
+  - curl
+  - gnupg-agent
+  - software-properties-common
 common_pip_packages:
   - virtualenv
   - setuptools
