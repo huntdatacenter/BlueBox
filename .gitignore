@@ -3,6 +3,7 @@
 packages.yml
 
 files/hosts.ini
+bluebox/files/hosts.txt
 **/*-ssh-key
 **/*-ssh-key.pub
 cluster-ssh-key

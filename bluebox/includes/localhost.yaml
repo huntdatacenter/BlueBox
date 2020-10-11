@@ -16,7 +16,7 @@
 - name: Get latest GNU Parallel
   become: yes
   unarchive:
-    src: https://ftp.gnu.org/gnu/parallel/parallel-20200322.tar.bz2
+    src: https://ftp.gnu.org/gnu/parallel/parallel-20200922.tar.bz2
     # http://ftp.gnu.org/gnu/parallel/parallel-latest.tar.bz2
     dest: /usr/local
     remote_src: yes
@@ -50,7 +50,7 @@
   file:
     path: "/home/{{ ansible_user_id }}/.parallel/will-cite"
     state: touch
-    mode: '0664'
+    mode: "0664"
   ignore_errors: yes
   when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
 

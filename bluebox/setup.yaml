@@ -24,10 +24,12 @@
     - name: "Add IAAS nodes from {{ hosts_path | default('hosts.txt') }} to Ansible inventory"
       add_host:
         hostname: "{{ item.split('@')[1].split(':')[0] if '@' in item else item.split('/')[1].split(':')[0] }}"
-        ansible_user: ubuntu
-        groups: ["all", "nodes"]
+        ansible_user: "{{ ansible_user_id }}"
+        ansible_ssh_user: "{{ ansible_user_id }}"
         ansible_ssh_private_key_file: "files/{{ ansible_user_id }}-ssh-key"
         local_lab_user: "{{ ansible_user_id }}"
+        ansible_python_interpreter: "/usr/bin/python3"
+        groups: ["all", "nodes"]
       ignore_errors: yes
       with_lines: "cat ../{{ hosts_path | default('hosts.txt') }}"
       tags: always
@@ -35,10 +37,12 @@
       add_host:
         hostname: "{{ item.split('@')[1].split(':')[0] if '@' in item else item.split('/')[1].split(':')[0] }}"
         ansible_user: ubuntu
+        ansible_ssh_user: ubuntu
         ansible_ssh_pass: ubuntu
         local_lab_user: "{{ ansible_user_id }}"
-        ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
-        # ansible_ssh_common_args: '-o PubkeyAuthentication=no -o PasswordAuthentication=yes'
+        ansible_ssh_common_args: "-o StrictHostKeyChecking=no -o IdentitiesOnly=yes"
+        ansible_python_interpreter: "/usr/bin/python3"
+        # ansible_ssh_common_args: "-o UserKnownHostsFile=/dev/null -o PasswordAuthentication=yes"
         groups: ["presetup"]
       ignore_errors: yes
       with_lines: "cat ../{{ hosts_path | default('hosts.txt') }}"
@@ -47,14 +51,52 @@
 # Prepare IAAS nodes
 - hosts: presetup
   tasks:
+    - name: Ensure group "bluebox" exists
+      become: yes
+      group:
+        name: bluebox
+        state: present
+    - name: Ensure user group exists
+      become: yes
+      group:
+        name: "{{ local_lab_user }}"
+        state: present
+    - name: Setup user
+      become: yes
+      user:
+        name: "{{ local_lab_user }}"
+        group: "{{ local_lab_user }}"
+        password: "{{ local_lab_user | password_hash('sha512') }}"
+        shell: /bin/bash
+        append: yes
+        groups:
+          - "sudo"
+          - "bluebox"
+          - "{{ local_lab_user }}"
+        comment: "bluebox user"
     - name: Set authorized key
+      become: yes
+      become_user: "{{ local_lab_user }}"
       authorized_key:
-        user: "{{ ansible_user }}"
+        user: "{{ local_lab_user }}"
         key: "{{ lookup('file', '{{ local_lab_user }}-ssh-key.pub') }}"
         state: present
         exclusive: no
         comment: "{{ local_lab_user }}@bluebox.iaas"
       tags: setupkeys
+    # - name: Set authorized key
+    #   authorized_key:
+    #     user: "{{ ansible_user }}"
+    #     key: "{{ lookup('file', '{{ local_lab_user }}-ssh-key.pub') }}"
+    #     state: present
+    #     exclusive: no
+    #     comment: "{{ local_lab_user }}@bluebox.iaas"
+    #   tags: setupkeys
+    - name: Set permissions
+      become: yes
+      copy:
+        content: "{{ local_lab_user }} ALL=(ALL) NOPASSWD:ALL"
+        dest: "/etc/sudoers.d/99-bluebox-{{ local_lab_user }}.conf"
 
 # Prepare IAAS nodes
 - hosts: nodes
@@ -65,6 +107,7 @@
       vars:
         possible_files:
           - "../packages.yml"
+          - "../packages.yaml"
           - "../example.packages.yml"
       tags: 'always'
   tasks:

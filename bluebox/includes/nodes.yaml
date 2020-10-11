@@ -3,13 +3,14 @@
 - name: Install common-packages
   apt:
     name: "{{ common_apt_packages }}"
+    update_cache: yes
 
 # Pip installation - assure actual versions
 - name: Get PIP installation
   get_url:
     url: "https://bootstrap.pypa.io/get-pip.py"
     dest: "/tmp/get-pip.py"
-    mode: '0777'
+    mode: "0777"
   register: getpip
 - name: Install PIP (Python 2)
   command:
@@ -33,10 +34,26 @@
     executable: /usr/local/bin/pip3
   ignore_errors: yes
 
+- name: Ansible config directory
+  become: yes
+  become_user: "{{ local_lab_user }}"
+  file:
+    path: "/home/{{ local_lab_user }}/.ansible"
+    state: directory
+    mode: "0755"
+
+- name: Ansible tmp directory
+  become: yes
+  become_user: "{{ local_lab_user }}"
+  file:
+    path: "/home/{{ local_lab_user }}/.ansible/tmp"
+    state: directory
+    mode: "0777"
+
 - name: Get latest GNU Parallel
   # become: yes
   unarchive:
-    src: https://ftp.gnu.org/gnu/parallel/parallel-20200322.tar.bz2
+    src: https://ftp.gnu.org/gnu/parallel/parallel-20200922.tar.bz2
     # http://ftp.gnu.org/gnu/parallel/parallel-latest.tar.bz2
     dest: /usr/local
     remote_src: yes
@@ -65,46 +82,52 @@
     filename: "{{ ansible_distribution_release }}-cran35"
 
 - name: Paralell rc directory
-  become: no
+  become: yes
+  become_user: "{{ local_lab_user }}"
   file:
-    path: "/home/{{ ansible_user }}/.parallel"
+    path: "/home/{{ local_lab_user }}/.parallel"
     state: directory
 
 - name: Paralell confirm
-  become: no
+  become: yes
+  become_user: "{{ local_lab_user }}"
   file:
-    path: "/home/{{ ansible_user }}/.parallel/will-cite"
+    path: "/home/{{ local_lab_user }}/.parallel/will-cite"
     state: touch
-    mode: '0664'
+    mode: "0664"
 
 - name: Get miniconda script
   get_url:
     url: "https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh"
     dest: /tmp/miniconda.sh
-    mode: '0777'
+    mode: "0777"
 
 - name: Install Miniconda
-  become: no
+  become: yes
+  become_user: "{{ local_lab_user }}"
   command:
-    cmd: bash /tmp/miniconda.sh -b -p /home/{{ ansible_user }}/miniconda
-    creates: /home/{{ ansible_user }}/miniconda/bin/conda
+    cmd: bash /tmp/miniconda.sh -b -p /home/{{ local_lab_user }}/miniconda
+    creates: /home/{{ local_lab_user }}/miniconda/bin/conda
 
 - name: Install base condarc
-  become: no
-  copy: src=condarc dest=/home/{{ ansible_user }}/.condarc
+  become: yes
+  become_user: "{{ local_lab_user }}"
+  copy: src=condarc dest=/home/{{ local_lab_user }}/.condarc
 
 - name: Add miniconda to the PATH
-  become: no
+  become: yes
+  become_user: "{{ local_lab_user }}"
   lineinfile:
-    dest: "/home/{{ ansible_user }}/.bashrc"
-    line: export PATH=/home/{{ ansible_user }}/miniconda/bin:$PATH
+    dest: "/home/{{ local_lab_user }}/.bashrc"
+    line: export PATH=/home/{{ local_lab_user }}/miniconda/bin:$PATH
     state: present
 
 - name: Add bluebox env SCIBOX_HOME
-  become: no
+  become: yes
+  become_user: "{{ local_lab_user }}"
   lineinfile:
-    dest: "/home/{{ ansible_user }}/.bashrc"
-    line: export SCIBOX_HOME=/home/{{ ansible_user }}/bluebox
+    dest: "/home/{{ local_lab_user }}/.bashrc"
+    line: export SCIBOX_HOME=/home/{{ local_lab_user }}/bluebox
     state: present
 
 - name: Add BlueBoxMon
@@ -112,11 +135,12 @@
   copy:
     src: blueboxmon
     dest: /usr/local/bin/blueboxmon
-    mode: '0755'
+    mode: "0755"
 
 - name: Add bluebox to the PATH
-  become: no
+  become: yes
+  become_user: "{{ local_lab_user }}"
   lineinfile:
-    dest: "/home/{{ ansible_user }}/.bashrc"
-    line: export PATH=/home/{{ ansible_user }}/bluebox:$PATH
+    dest: "/home/{{ local_lab_user }}/.bashrc"
+    line: export PATH=/home/{{ local_lab_user }}/bluebox:$PATH
     state: present

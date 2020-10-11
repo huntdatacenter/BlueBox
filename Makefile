@@ -12,6 +12,7 @@ LOCAL_CODE_PATH ?= '../code'
 LOCAL_RESULTS_PATH ?= '../results'
 tasks := tasks.txt
 hosts := hosts.txt
+tmphosts := bluebox/files/hosts.txt
 params := --env PARALLEL_USER --ungroup --no-run-if-empty --filter-hosts
 joblog := task.log
 
@@ -49,7 +50,8 @@ run: ## Run tasks.txt (Optional: params,tasks,hosts,joblog)
 	@echo "Run: $(tasks)"
 	@eval $$(ssh-agent -s) >/dev/null 2>&1
 	@ssh-add bluebox/files/$$(whoami)-ssh-key >/dev/null 2>&1
-	@parallel $(params) --joblog $(joblog) --sshloginfile "$(hosts)" --workdir "/home/ubuntu/bluebox" :::: "$(tasks)"
+	@sed -E "s|[a-zA-Z0-9\-\_\.]+@|$(USER)@|g" "$(hosts)" > "$(tmphosts)"
+	@parallel $(params) --joblog $(joblog) --sshloginfile "$(tmphosts)" --workdir "/home/$(USER)/bluebox" :::: "$(tasks)"
 
 run-all: clean code data run results
 
@@ -61,7 +63,7 @@ resume: params += --resume
 resume: run
 
 ssh:
-	@ssh -i bluebox/files/$(USER)-ssh-key ubuntu@$(host)
+	@ssh -i bluebox/files/$(USER)-ssh-key $(USER)@$(host)
 
 watch:
 	@watch -c -n 3 "pssh -h \"$(hosts)\" -x \"-i bluebox/files/$$(whoami)-ssh-key\" -P 'S_COLORS=always blueboxmon' | sed -E 's/^([0-9.]+):/\1:\n/g' | grep -v SUCCESS"
