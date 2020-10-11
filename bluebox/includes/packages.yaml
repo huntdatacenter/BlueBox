@@ -1,5 +1,31 @@
 ---
-- name: Install APT packages.
+- name: Add APT keys
+  apt_key:
+    url: "{{ item.url | default(item) }}"
+    id: "{{ item.id | default(omit) }}"
+    keyserver: "{{ item.keyserver | default(omit) }}"
+    keyring: "{{ item.keyring | default(omit) }}"
+    file: "{{ item.file | default(omit) }}"
+    data: "{{ item.data | default(omit) }}"
+    state: "{{ item.state | default('present') }}"
+  with_items: "{{ apt_keys | default([]) }}"
+  ignore_errors: yes
+
+# Use ansible_distribution_release variable in packages.yml instead of specific ubuntu version
+- name: Install APT repository
+  apt_repository:
+    repo: "{{ item.repo | default(item) }}"
+    filename: "{{ item.filename | default(omit) }}"
+    state: "{{ item.state | default('present') }}"
+    update_cache: "{{ item.update_cache | default('no') }}"
+  with_items: "{{ apt_repositories | default([]) }}"
+  ignore_errors: yes
+
+- name: Run apt-get update
+  apt:
+    update_cache: "yes"
+
+- name: Install APT packages
   apt:
     name: "{{ item.name | default(item) }}"
     state: "{{ item.state | default('present') }}"
