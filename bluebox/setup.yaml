@@ -63,7 +63,7 @@
       tags: setupkeys
     - become: yes
       user:
-        name: "{{ ansible_user }}"
+        name: "{{ local_lab_user }}"
         groups: docker
         append: yes
       ignore_errors: yes
