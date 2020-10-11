@@ -69,3 +69,25 @@ No conda packages required:
 ```
 conda_packages: []
 ```
+
+# Docker Example
+
+Example of docker installation using packages.yml definition based on
+[Official docker installation guide for Ubuntu](https://docs.docker.com/engine/install/ubuntu/)
+shows how to correctly set apt keys and add official apt repository, to be able to install
+essential docker packages:
+
+```
+apt_keys:
+  - id: 9DC858229FC7DD38854AE2D88D81803C0EBFCD88
+    url: https://download.docker.com/linux/ubuntu/gpg
+
+apt_repositories:
+  - repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
+    filename: "docker-engine"
+
+apt_packages:
+  - docker-ce
+  - docker-ce-cli
+  - containerd.io
+```

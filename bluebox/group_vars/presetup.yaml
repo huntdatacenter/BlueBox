@@ -30,6 +30,11 @@ common_apt_packages:
   - dstat
   - sysstat
   - bash-completion
+  - apt-transport-https
+  - ca-certificates
+  - curl
+  - gnupg-agent
+  - software-properties-common
 common_pip_packages:
   - virtualenv
   - setuptools
