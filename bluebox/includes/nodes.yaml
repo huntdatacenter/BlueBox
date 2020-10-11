@@ -96,6 +96,26 @@
     state: touch
     mode: "0664"
 
+- name: Check docker directory
+  file:
+    path: "/etc/docker/"
+    state: directory
+    mode: '0755'
+  register: dockerdir
+
+- name: Set docker logging config
+  copy:
+    dest: /etc/docker/daemon.json
+    content: >
+      {
+        "log-driver": "json-file",
+        "log-opts": {
+          "max-size": "10m",
+          "max-file": "3"
+        }
+      }
+  when: dockerdir is not skipped and dockerdir is successful
+
 - name: Get miniconda script
   get_url:
     url: "https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh"

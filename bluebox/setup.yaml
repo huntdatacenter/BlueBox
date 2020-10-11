@@ -51,16 +51,17 @@
 # Prepare IAAS nodes
 - hosts: presetup
   tasks:
-    - name: Ensure group "bluebox" exists
+    - name: Ensure groups exist
       become: yes
       group:
-        name: bluebox
+        name: "{{ item }}"
         state: present
-    - name: Ensure user group exists
-      become: yes
-      group:
-        name: "{{ local_lab_user }}"
-        state: present
+      ignore_errors: yes
+      with_items:
+        - bluebox
+        - "{{ local_lab_user }}"
+        - docker
+      when: addgroups is not skipped and addgroups is successful
     - name: Setup user
       become: yes
       user:
@@ -70,8 +71,9 @@
         shell: /bin/bash
         append: yes
         groups:
-          - "sudo"
-          - "bluebox"
+          - sudo
+          - docker
+          - bluebox
           - "{{ local_lab_user }}"
         comment: "bluebox user"
     - name: Set authorized key
@@ -97,6 +99,13 @@
       copy:
         content: "{{ local_lab_user }} ALL=(ALL) NOPASSWD:ALL"
         dest: "/etc/sudoers.d/99-bluebox-{{ local_lab_user }}.conf"
+    - become: yes
+      user:
+        name: "{{ ansible_user }}"
+        groups: docker
+        append: yes
+      ignore_errors: yes
+      when: addgroups is not skipped and addgroups is successful
 
 # Prepare IAAS nodes
 - hosts: nodes
