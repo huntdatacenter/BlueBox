@@ -61,7 +61,7 @@
         - bluebox
         - "{{ local_lab_user }}"
         - docker
-      when: addgroups is not skipped and addgroups is successful
+      register: addgroups
     - name: Setup user
       become: yes
       user:
@@ -72,7 +72,6 @@
         append: yes
         groups:
           - sudo
-          - docker
           - bluebox
           - "{{ local_lab_user }}"
         comment: "bluebox user"
