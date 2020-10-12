@@ -1,4 +1,4 @@
-![BlueBox - IAAS toolkit](https://raw.githubusercontent.com/huntdatacenter/BlueBox/master/bluebox/files/bluebox_title_ref_undraw.png){:height="250px" width="1000px"}
+![BlueBox - IAAS toolkit](https://raw.githubusercontent.com/huntdatacenter/BlueBox/master/bluebox/files/bluebox_title_ref_undraw.png){: height="250px" width="1000px"}
 
 BlueBox helps to move into distributed compute with your research workload.
 It simplifies installation of dependency packages on multiple servers.
