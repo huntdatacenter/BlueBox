@@ -1,6 +1,5 @@
 ---
 ansible_connection: ssh
-ansible_user: ubuntu
 become: yes
 gather_facts: true
 common_apt_packages:
@@ -10,9 +9,10 @@ common_apt_packages:
   - sshpass
   - build-essential
   - python-setuptools
-  - python-apt
-  - python3-apt
   - python-dev
+  - python3-setuptools
+  - python3-distutils
+  - python3-apt
   - python3-dev
   - xz-utils
   - autoconf
@@ -27,7 +27,9 @@ common_apt_packages:
   - libgsl0-dev
   - rng-tools
   - uuid
+  - dstat
   - sysstat
+  - bash-completion
   - apt-transport-https
   - ca-certificates
   - curl
@@ -37,9 +39,6 @@ common_pip_packages:
   - virtualenv
   - setuptools
   - wheel
-  - numpy
-  - pandas
-  - scipy
   - six
   - tox
   - jmespath

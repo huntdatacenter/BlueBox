@@ -1,6 +1,5 @@
 ---
 ansible_connection: ssh
-ansible_user: ubuntu
 remote_code_path: ~/bluebox
 remote_data_path: ~/bluebox/data
 remote_results_path: ~/bluebox/results
