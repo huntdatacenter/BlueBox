@@ -75,6 +75,11 @@
           - bluebox
           - "{{ local_lab_user }}"
         comment: "bluebox user"
+    - name: Set permissions
+      become: yes
+      copy:
+        content: "{{ local_lab_user }} ALL=(ALL) NOPASSWD:ALL"
+        dest: "/etc/sudoers.d/99-bluebox-{{ local_lab_user }}.conf"
     - name: Set authorized key
       become: yes
       become_user: "{{ local_lab_user }}"
@@ -93,11 +98,6 @@
     #     exclusive: no
     #     comment: "{{ local_lab_user }}@bluebox.iaas"
     #   tags: setupkeys
-    - name: Set permissions
-      become: yes
-      copy:
-        content: "{{ local_lab_user }} ALL=(ALL) NOPASSWD:ALL"
-        dest: "/etc/sudoers.d/99-bluebox-{{ local_lab_user }}.conf"
     - become: yes
       user:
         name: "{{ local_lab_user }}"
