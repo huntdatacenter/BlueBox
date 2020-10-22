@@ -51,6 +51,12 @@
 # Prepare IAAS nodes
 - hosts: presetup
   tasks:
+    - name: Assure acl is installed
+      become: yes
+      apt:
+        pkg: "acl"
+        state: present
+      ignore_errors: yes
     - name: Ensure groups exist
       become: yes
       group:
@@ -80,7 +86,7 @@
       become: yes
       copy:
         content: "{{ local_lab_user }} ALL=(ALL) NOPASSWD:ALL"
-        dest: "/etc/sudoers.d/99-bluebox-{{ local_lab_user }}.conf"
+        dest: "/etc/sudoers.d/99-bluebox-{{ local_lab_user }}"
     - name: Set authorized key
       become: yes
       become_user: "{{ local_lab_user }}"

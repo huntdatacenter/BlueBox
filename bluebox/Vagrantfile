@@ -20,7 +20,7 @@ servers = [
 Vagrant.configure(2) do |config|
   servers.each do |opts|
     config.vm.define opts[:name] do |box|
-      box.vm.box = "bento/ubuntu-18.04"
+      box.vm.box = "bento/ubuntu-20.04"
       box.vm.hostname = opts[:name]
       # Entry ip
       box.vm.network "private_network", ip: opts[:ip]
