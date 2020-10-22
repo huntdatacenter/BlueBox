@@ -80,6 +80,12 @@
   apt_repository:
     repo: "deb https://cloud.r-project.org/bin/linux/ubuntu {{ ansible_distribution_release }}-cran35/"
     filename: "{{ ansible_distribution_release }}-cran35"
+  when: ansible_distribution_release == 'xenial' or ansible_distribution_release == 'bionic'
+- name: Add 4.0 CRAN repository
+  apt_repository:
+    repo: "deb https://cloud.r-project.org/bin/linux/ubuntu {{ ansible_distribution_release }}-cran40/"
+    filename: "{{ ansible_distribution_release }}-cran40"
+  when: ansible_distribution_release == 'focal'
 
 - name: Paralell rc directory
   become: yes
