@@ -12,22 +12,12 @@
     dest: "/tmp/get-pip.py"
     mode: "0777"
   register: getpip
-- name: Install PIP (Python 2)
-  command:
-    cmd: /usr/bin/python2 /tmp/get-pip.py
-    creates: /usr/local/bin/pip2
-  when: getpip is not skipped
 - name: Install PIP (Python 3)
   command:
     cmd: /usr/bin/python3 /tmp/get-pip.py
     creates: /usr/local/bin/pip3
   when: getpip is not skipped
 
-- name: Install global PIP packages (Python 2)
-  pip:
-    name: "{{ common_pip_packages }}"
-    executable: /usr/local/bin/pip2
-  ignore_errors: yes
 - name: Install global PIP packages (Python 3)
   pip:
     name: "{{ common_pip_packages }}"
