@@ -33,16 +33,6 @@
   with_items: "{{ apt_packages | default([]) }}"
   ignore_errors: yes
 
-- name: Install PIP packages (Python 2)
-  pip:
-    name: "{{ item.name | default(item) }}"
-    state: "{{ item.state | default('present') }}"
-    version: "{{ item.version | default(omit) }}"
-    executable: "/usr/local/bin/pip2"
-    extra_args: "--user"
-  with_items: "{{ python_pip_packages | default([]) }}"
-  ignore_errors: yes
-
 - name: Install PIP packages (Python 3)
   pip:
     name: "{{ item.name | default(item) }}"
