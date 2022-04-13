@@ -59,13 +59,13 @@ bash example.sh J03
 
 Starting a workload on nodes:
 ```
-make run tasks=example.tasks.txt
+make run tasks=example.tasks.txt joblog=task.log
 ```
 
 Command above `make run` is wrapping distribution of tasks to hosts using
 [Parallel](https://www.gnu.org/software/parallel/man.html#NAME), which shortcuts long version:
 ```
-parallel --ungroup --joblog task.log --sshloginfile hosts.txt --no-run-if-empty --workdir /home/ubuntu/bluebox :::: tasks.txt
+parallel --ungroup --joblog task.log --sshloginfile hosts.txt --no-run-if-empty --workdir /home/ubuntu/bluebox :::: example.tasks.txt
 ```
 
 To run all (clean, code, data, tasks, and results) commands use the shortcut:
