@@ -3,7 +3,7 @@
 ## How can I run analysis unattached?
 
 ```
-nohup setsuid make run
+nohup setsid make run
 ```
 
 ## What to do if make results fail?
